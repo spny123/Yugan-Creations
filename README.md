@@ -4,10 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CloudVault Pro - Your Personal Cloud Storage</title>
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:;">
-    <meta http-equiv="X-Frame-Options" content="DENY">
-    <meta http-equiv="X-Content-Type-Options" content="nosniff">
-    <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
     <style>
         * {
             margin: 0;
@@ -29,7 +25,6 @@
             --success: #10b981;
             --warning: #f59e0b;
             --error: #ef4444;
-            --security: #8b5cf6;
         }
 
         [data-theme="dark"] {
@@ -51,52 +46,6 @@
             color: var(--text-primary);
             transition: all 0.3s ease;
             overflow-x: hidden;
-            user-select: none;
-            -webkit-user-select: none;
-            -moz-user-select: none;
-            -ms-user-select: none;
-        }
-
-        /* Anti-debugging protection */
-        .debug-protection {
-            position: absolute;
-            width: 0;
-            height: 0;
-            overflow: hidden;
-            opacity: 0;
-        }
-
-        .security-shield {
-            position: fixed;
-            top: 10px;
-            right: 10px;
-            background: var(--security);
-            color: white;
-            padding: 0.5rem;
-            border-radius: 50%;
-            font-size: 0.8rem;
-            z-index: 9999;
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); opacity: 0.8; }
-            50% { transform: scale(1.1); opacity: 1; }
-        }
-
-        .security-status {
-            background: linear-gradient(45deg, var(--success), var(--security));
-            color: white;
-            padding: 0.25rem 0.75rem;
-            border-radius: 1rem;
-            font-size: 0.75rem;
-            margin-left: 1rem;
-            animation: glow 3s ease-in-out infinite alternate;
-        }
-
-        @keyframes glow {
-            from { box-shadow: 0 0 5px var(--success); }
-            to { box-shadow: 0 0 15px var(--security), 0 0 25px var(--security); }
         }
 
         .login-screen {
@@ -122,7 +71,6 @@
             width: 90%;
             transform: translateY(-20px);
             animation: slideUp 0.6s ease-out;
-            border: 3px solid var(--security);
         }
 
         @keyframes slideUp {
@@ -135,22 +83,6 @@
             font-weight: 700;
             color: var(--primary-color);
             margin-bottom: 1rem;
-        }
-
-        .security-badge {
-            background: linear-gradient(45deg, var(--security), var(--primary-color));
-            color: white;
-            padding: 0.5rem 1rem;
-            border-radius: 2rem;
-            font-size: 0.8rem;
-            margin-bottom: 1rem;
-            display: inline-block;
-            animation: shimmer 2s infinite;
-        }
-
-        @keyframes shimmer {
-            0% { background-position: -200% 0; }
-            100% { background-position: 200% 0; }
         }
 
         .input-group {
@@ -181,11 +113,6 @@
             border-color: var(--primary-color);
         }
 
-        .security-input {
-            border: 2px solid var(--security) !important;
-            background: linear-gradient(45deg, var(--background), rgba(139, 92, 246, 0.1));
-        }
-
         .btn {
             background: var(--primary-color);
             color: white;
@@ -203,22 +130,9 @@
             transform: translateY(-2px);
         }
 
-        .btn-security {
-            background: linear-gradient(45deg, var(--security), var(--primary-color));
-        }
-
         .btn-secondary {
             background: var(--surface-hover);
             color: var(--text-primary);
-        }
-
-        .failed-attempts {
-            background: var(--error);
-            color: white;
-            padding: 0.5rem;
-            border-radius: 0.5rem;
-            margin-top: 1rem;
-            font-size: 0.875rem;
         }
 
         .header {
@@ -346,11 +260,6 @@
             transform: translateY(-2px);
         }
 
-        .secure-upload {
-            border-color: var(--security);
-            background: linear-gradient(45deg, var(--surface), rgba(139, 92, 246, 0.1));
-        }
-
         .files-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
@@ -377,11 +286,6 @@
             background: var(--surface-hover);
         }
 
-        .file-card.encrypted {
-            border: 2px solid var(--security);
-            background: linear-gradient(45deg, var(--surface), rgba(139, 92, 246, 0.1));
-        }
-
         .file-icon {
             width: 48px;
             height: 48px;
@@ -397,10 +301,6 @@
 
         .folder-icon {
             background: #f59e0b;
-        }
-
-        .secure-icon {
-            background: var(--security);
         }
 
         .file-name {
@@ -612,11 +512,6 @@
             gap: 1rem;
         }
 
-        .security-setting {
-            border: 2px solid var(--security);
-            background: linear-gradient(45deg, var(--surface), rgba(139, 92, 246, 0.1));
-        }
-
         .settings-section {
             margin-bottom: 2rem;
         }
@@ -624,9 +519,6 @@
         .settings-section h3 {
             margin-bottom: 1rem;
             color: var(--text-primary);
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
         }
 
         .storage-setting {
@@ -642,66 +534,6 @@
             background: var(--background);
             color: var(--text-primary);
             width: 100px;
-        }
-
-        .encryption-indicator {
-            background: var(--security);
-            color: white;
-            padding: 0.2rem 0.5rem;
-            border-radius: 0.25rem;
-            font-size: 0.7rem;
-            position: absolute;
-            top: 0.5rem;
-            left: 0.5rem;
-        }
-
-        .virus-scan-status {
-            background: var(--success);
-            color: white;
-            padding: 0.2rem 0.5rem;
-            border-radius: 0.25rem;
-            font-size: 0.7rem;
-            position: absolute;
-            bottom: 0.5rem;
-            left: 0.5rem;
-        }
-
-        /* Security notifications */
-        .security-alert {
-            background: linear-gradient(45deg, var(--error), var(--warning));
-            color: white;
-            padding: 1rem;
-            border-radius: 0.5rem;
-            margin-bottom: 1rem;
-            animation: pulse 1.5s infinite;
-        }
-
-        .lockdown-mode {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(255, 0, 0, 0.9);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 9999;
-            color: white;
-            font-size: 2rem;
-            text-align: center;
-        }
-
-        /* Anti-tampering styles */
-        .tamper-protection::before {
-            content: '';
-            position: absolute;
-            top: -1000px;
-            left: -1000px;
-            width: calc(100% + 2000px);
-            height: calc(100% + 2000px);
-            pointer-events: none;
-            z-index: -1;
         }
 
         @media (max-width: 768px) {
@@ -749,42 +581,19 @@
     </style>
 </head>
 <body data-theme="light">
-    <!-- Security Shield -->
-    <div class="security-shield" title="Z+ Security Active">???</div>
-    
-    <!-- Anti-debugging protection -->
-    <div class="debug-protection">
-        <script>
-            setInterval(function() {
-                if (window.console && (window.console.firebug || window.console._commandLineAPI || window.console._inspectorCommandLineAPI)) {
-                    document.body.innerHTML = '<div class="lockdown-mode"><div>???<br>SECURITY BREACH DETECTED<br>ACCESS DENIED</div></div>';
-                    throw new Error('Developer tools detected!');
-                }
-            }, 100);
-        </script>
-    </div>
-
     <!-- Login Screen -->
     <div class="login-screen" id="loginScreen">
-        <div class="login-card tamper-protection">
+        <div class="login-card">
             <div class="logo">?? CloudVault Pro</div>
-            <div class="security-badge">??? Z+ SECURITY PROTECTED</div>
             <p style="margin-bottom: 2rem; color: var(--text-secondary);">
-                Ultra-secure cloud storage with military-grade protection
+                Secure cloud storage for all your files
             </p>
             <form id="loginForm">
                 <div class="input-group">
-                    <label for="password">Password</label>
-                    <input type="password" id="password" placeholder="Enter your password" required class="security-input">
+                    <label for="password">Enter Password</label>
+                    <input type="password" id="password" placeholder="Enter your password" required>
                 </div>
-                <div class="input-group">
-                    <label for="masterPassword">Master Key (Optional)</label>
-                    <input type="password" id="masterPassword" placeholder="Enter master key for advanced access" class="security-input">
-                </div>
-                <button type="submit" class="btn btn-security">??? Secure Access</button>
-                <div id="failedAttempts" class="failed-attempts hidden">
-                    Failed attempts: <span id="attemptCount">0</span>/5
-                </div>
+                <button type="submit" class="btn">Access CloudVault</button>
             </form>
         </div>
     </div>
@@ -794,7 +603,6 @@
         <header class="header">
             <div class="header-left">
                 <div class="logo">?? CloudVault Pro</div>
-                <div class="security-status">??? Z+ PROTECTED</div>
                 <div class="search-bar">
                     <input type="text" placeholder="Search files..." id="searchInput">
                     <span class="search-icon">??</span>
@@ -809,9 +617,6 @@
                 </button>
                 <button class="theme-toggle" onclick="openSettings()" title="Settings">
                     ??
-                </button>
-                <button class="theme-toggle" onclick="openSecurityCenter()" title="Security Center">
-                    ???
                 </button>
                 <button class="btn" onclick="logout()">Logout</button>
             </div>
@@ -831,9 +636,6 @@
                 <div class="sidebar-item" data-section="videos">
                     ?? Videos
                 </div>
-                <div class="sidebar-item" data-section="secure">
-                    ??? Secure Vault
-                </div>
                 <div class="sidebar-item" data-section="recent">
                     ?? Recent
                 </div>
@@ -846,11 +648,6 @@
             </aside>
 
             <main class="content-area">
-                <!-- Security Alert -->
-                <div id="securityAlert" class="security-alert hidden">
-                    ??? Security Alert: Suspicious activity detected. System is monitoring.
-                </div>
-
                 <!-- Breadcrumb -->
                 <div class="breadcrumb" id="breadcrumb">
                     <span class="breadcrumb-item" onclick="navigateToFolder(null)">?? Home</span>
@@ -860,7 +657,6 @@
                 <div class="bulk-actions hidden" id="bulkActions">
                     <span id="selectionCount">0 files selected</span>
                     <button class="btn" onclick="bulkDownload()">?? Download</button>
-                    <button class="btn" onclick="bulkEncrypt()">?? Encrypt</button>
                     <button class="btn" onclick="bulkDelete()">??? Delete</button>
                     <button class="btn" onclick="bulkMove()">?? Move</button>
                     <button class="btn btn-secondary" onclick="clearSelection()">Clear</button>
@@ -873,14 +669,8 @@
                     <button class="btn" onclick="createFolder()">
                         ?? New Folder
                     </button>
-                    <button class="btn btn-security" onclick="createSecureFolder()">
-                        ??? Secure Folder
-                    </button>
                     <button class="btn" onclick="toggleView()">
                         ? Grid View
-                    </button>
-                    <button class="btn btn-secondary" onclick="virusScanAll()">
-                        ?? Scan All
                     </button>
                     <button class="btn btn-secondary" onclick="backupData()">
                         ?? Backup
@@ -890,11 +680,11 @@
                     </button>
                 </div>
 
-                <div class="upload-area secure-upload" id="uploadArea" onclick="document.getElementById('fileInput').click()">
-                    <div style="font-size: 3rem; margin-bottom: 1rem;">???</div>
-                    <h3>Secure Upload Zone</h3>
+                <div class="upload-area" id="uploadArea" onclick="document.getElementById('fileInput').click()">
+                    <div style="font-size: 3rem; margin-bottom: 1rem;">??</div>
+                    <h3>Drag & Drop files here or click to upload</h3>
                     <p style="color: var(--text-secondary); margin-top: 0.5rem;">
-                        All files are automatically encrypted and virus-scanned
+                        Support for all file types - Images, Documents, Videos, and more
                     </p>
                     <div class="progress-bar hidden" id="progressBar">
                         <div class="progress-fill" id="progressFill"></div>
@@ -931,54 +721,18 @@
     <div class="modal" id="settingsModal">
         <div class="modal-content">
             <h3>?? Settings</h3>
-            
             <div class="settings-section">
-                <h3>??? Security</h3>
-                <div class="setting-item security-setting">
+                <h3>Security</h3>
+                <div class="setting-item">
                     <div>
                         <strong>Change Password</strong>
                         <p style="color: var(--text-secondary); font-size: 0.875rem;">Update your login password</p>
                     </div>
-                    <button class="btn btn-security" onclick="changePassword()">Change</button>
-                </div>
-                <div class="setting-item security-setting">
-                    <div>
-                        <strong>Master Key</strong>
-                        <p style="color: var(--text-secondary); font-size: 0.875rem;">Set or change master key for advanced features</p>
-                    </div>
-                    <button class="btn btn-security" onclick="changeMasterKey()">Configure</button>
-                </div>
-                <div class="setting-item security-setting">
-                    <div>
-                        <strong>Two-Factor Authentication</strong>
-                        <p style="color: var(--text-secondary); font-size: 0.875rem;">Enable additional security layer</p>
-                    </div>
-                    <input type="checkbox" id="twoFactorAuth" onchange="toggleTwoFactor()">
-                </div>
-                <div class="setting-item security-setting">
-                    <div>
-                        <strong>Auto-Lock</strong>
-                        <p style="color: var(--text-secondary); font-size: 0.875rem;">Lock after inactivity (minutes)</p>
-                    </div>
-                    <div class="storage-setting">
-                        <input type="number" id="autoLockTime" min="1" max="60" value="15">
-                        <button class="btn btn-security" onclick="updateAutoLock()">Set</button>
-                    </div>
-                </div>
-                <div class="setting-item security-setting">
-                    <div>
-                        <strong>Encryption Level</strong>
-                        <p style="color: var(--text-secondary); font-size: 0.875rem;">File encryption strength</p>
-                    </div>
-                    <select id="encryptionLevel" onchange="updateEncryption()" style="padding: 0.5rem; border-radius: 0.25rem;">
-                        <option value="aes256">AES-256 (Military Grade)</option>
-                        <option value="aes512">AES-512 (Maximum Security)</option>
-                    </select>
+                    <button class="btn" onclick="changePassword()">Change</button>
                 </div>
             </div>
-            
             <div class="settings-section">
-                <h3>?? Storage</h3>
+                <h3>Storage</h3>
                 <div class="setting-item">
                     <div>
                         <strong>Storage Limit</strong>
@@ -989,13 +743,6 @@
                         <span>GB</span>
                         <button class="btn" onclick="updateStorageLimit()">Update</button>
                     </div>
-                </div>
-                <div class="setting-item">
-                    <div>
-                        <strong>Auto-Backup</strong>
-                        <p style="color: var(--text-secondary); font-size: 0.875rem;">Automatically backup data daily</p>
-                    </div>
-                    <input type="checkbox" id="autoBackup" onchange="toggleAutoBackup()">
                 </div>
                 <div class="setting-item">
                     <div>
@@ -1012,34 +759,8 @@
                     <button class="btn" onclick="exportAllData()">Export</button>
                 </div>
             </div>
-            
             <div class="settings-section">
-                <h3>?? Anti-Virus</h3>
-                <div class="setting-item security-setting">
-                    <div>
-                        <strong>Real-time Scanning</strong>
-                        <p style="color: var(--text-secondary); font-size: 0.875rem;">Scan files automatically on upload</p>
-                    </div>
-                    <input type="checkbox" id="realtimeScanning" checked onchange="toggleRealtimeScanning()">
-                </div>
-                <div class="setting-item security-setting">
-                    <div>
-                        <strong>Quarantine Threats</strong>
-                        <p style="color: var(--text-secondary); font-size: 0.875rem;">Automatically isolate malicious files</p>
-                    </div>
-                    <input type="checkbox" id="autoQuarantine" checked onchange="toggleAutoQuarantine()">
-                </div>
-                <div class="setting-item security-setting">
-                    <div>
-                        <strong>Scan All Files</strong>
-                        <p style="color: var(--text-secondary); font-size: 0.875rem;">Perform complete system scan</p>
-                    </div>
-                    <button class="btn btn-security" onclick="fullSystemScan()">?? Full Scan</button>
-                </div>
-            </div>
-            
-            <div class="settings-section">
-                <h3>?? Display</h3>
+                <h3>Display</h3>
                 <div class="setting-item">
                     <div>
                         <strong>Auto Dark Mode</strong>
@@ -1047,255 +768,48 @@
                     </div>
                     <input type="checkbox" id="autoDarkMode" onchange="toggleAutoDarkMode()">
                 </div>
-                <div class="setting-item">
-                    <div>
-                        <strong>Security Alerts</strong>
-                        <p style="color: var(--text-secondary); font-size: 0.875rem;">Show security notifications</p>
-                    </div>
-                    <input type="checkbox" id="securityAlerts" checked onchange="toggleSecurityAlerts()">
-                </div>
             </div>
-            
             <div style="margin-top: 2rem; text-align: right;">
                 <button class="btn btn-secondary" onclick="closeSettings()">Close</button>
             </div>
         </div>
     </div>
 
-    <!-- Security Center Modal -->
-    <div class="modal" id="securityModal">
-        <div class="modal-content">
-            <h3>??? Security Center</h3>
-            
-            <div class="settings-section">
-                <h3>?? Security Status</h3>
-                <div class="setting-item security-setting">
-                    <div>
-                        <strong>System Status</strong>
-                        <p style="color: var(--success); font-size: 0.875rem;" id="systemStatus">?? All systems secure</p>
-                    </div>
-                </div>
-                <div class="setting-item">
-                    <div>
-                        <strong>Last Scan</strong>
-                        <p style="color: var(--text-secondary); font-size: 0.875rem;" id="lastScanTime">Never</p>
-                    </div>
-                    <button class="btn btn-security" onclick="quickSecurityScan()">Quick Scan</button>
-                </div>
-                <div class="setting-item">
-                    <div>
-                        <strong>Threats Detected</strong>
-                        <p style="color: var(--text-secondary); font-size: 0.875rem;" id="threatsFound">0 threats found</p>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="settings-section">
-                <h3>?? Encryption Status</h3>
-                <div class="setting-item security-setting">
-                    <div>
-                        <strong>Encrypted Files</strong>
-                        <p style="color: var(--text-secondary); font-size: 0.875rem;" id="encryptedCount">0 files encrypted</p>
-                    </div>
-                    <button class="btn btn-security" onclick="encryptAllFiles()">Encrypt All</button>
-                </div>
-            </div>
-            
-            <div class="settings-section">
-                <h3>?? Security Logs</h3>
-                <div style="background: var(--background); padding: 1rem; border-radius: 0.5rem; max-height: 200px; overflow-y: auto; font-family: monospace; font-size: 0.8rem;" id="securityLogs">
-                    [INFO] Security system initialized<br>
-                    [INFO] Z+ Protection active<br>
-                    [INFO] All systems operational<br>
-                </div>
-            </div>
-            
-            <div style="margin-top: 2rem; text-align: right;">
-                <button class="btn btn-secondary" onclick="closeSecurityCenter()">Close</button>
-            </div>
-        </div>
-    </div>
-
     <script>
-        // Enhanced security variables
+        // Application state
         let files = [];
         let currentSection = 'all';
         let currentFolder = null;
         let selectedFiles = new Set();
         let isLoggedIn = false;
         let userPassword = '0122333';
-        let masterPassword = '0122333.,itachi.';
-        let maxStorageGB = 1000;
-        let failedAttempts = 0;
-        let isLocked = false;
-        let isMasterUser = false;
-        let securityLogs = [];
-        let encryptionKey = null;
-        let lastActivity = Date.now();
-        let autoLockTime = 15; // minutes
-        let securitySettings = {
-            realtimeScanning: true,
-            autoQuarantine: true,
-            twoFactorAuth: false,
-            encryptionLevel: 'aes256',
-            securityAlerts: true,
-            autoBackup: false
-        };
+        let maxStorageGB = 1000; // Default 1TB in GB
 
-        // Anti-tampering protection
-        const originalFunctions = {
-            eval: window.eval,
-            setTimeout: window.setTimeout,
-            setInterval: window.setInterval
-        };
-
-        // Override dangerous functions
-        window.eval = function() { 
-            logSecurityEvent('THREAT', 'Code injection attempt detected');
-            throw new Error('Eval disabled for security'); 
-        };
-
-        // Console detection
-        let devtools = { open: false };
-        const threshold = 160;
-        setInterval(() => {
-            if (window.outerHeight - window.innerHeight > threshold || 
-                window.outerWidth - window.innerWidth > threshold) {
-                if (!devtools.open) {
-                    devtools.open = true;
-                    logSecurityEvent('WARNING', 'Developer tools opened');
-                    showSecurityAlert('Security Alert: Developer tools detected!');
-                }
-            } else {
-                devtools.open = false;
-            }
-        }, 500);
-
-        // Advanced encryption functions
-        function simpleEncrypt(text, key) {
-            if (!text) return text;
-            let result = '';
-            for (let i = 0; i < text.length; i++) {
-                const char = text.charCodeAt(i);
-                const keyChar = key.charCodeAt(i % key.length);
-                result += String.fromCharCode((char + keyChar) % 65536);
-            }
-            return btoa(result);
-        }
-
-        function simpleDecrypt(encryptedText, key) {
-            if (!encryptedText) return encryptedText;
-            try {
-                const text = atob(encryptedText);
-                let result = '';
-                for (let i = 0; i < text.length; i++) {
-                    const char = text.charCodeAt(i);
-                    const keyChar = key.charCodeAt(i % key.length);
-                    result += String.fromCharCode((char - keyChar + 65536) % 65536);
-                }
-                return result;
-            } catch (e) {
-                return encryptedText;
-            }
-        }
-
-        // Security logging
-        function logSecurityEvent(level, message) {
-            const timestamp = new Date().toISOString();
-            const logEntry = `[${timestamp}] [${level}] ${message}`;
-            securityLogs.push(logEntry);
-            
-            // Keep only last 100 logs
-            if (securityLogs.length > 100) {
-                securityLogs = securityLogs.slice(-100);
-            }
-            
-            console.log(logEntry);
-            updateSecurityLogs();
-        }
-
-        function updateSecurityLogs() {
-            const logsElement = document.getElementById('securityLogs');
-            if (logsElement) {
-                logsElement.innerHTML = securityLogs.slice(-20).join('<br>');
-                logsElement.scrollTop = logsElement.scrollHeight;
-            }
-        }
-
-        // Virus scanning simulation
-        function virusScan(file) {
-            const maliciousPatterns = [
-                /virus/i, /malware/i, /trojan/i, /backdoor/i, /keylogger/i,
-                /ransomware/i, /spyware/i, /rootkit/i, /worm/i, /phishing/i,
-                /javascript:/, /<script/i, /eval\(/i, /document\.write/i,
-                /onclick=/i, /onerror=/i, /onload=/i
-            ];
-            
-            const suspiciousExtensions = ['.exe', '.scr', '.bat', '.cmd', '.pif', '.vbs', '.js'];
-            
-            // Check filename
-            if (suspiciousExtensions.some(ext => file.name.toLowerCase().endsWith(ext))) {
-                logSecurityEvent('THREAT', `Suspicious file type detected: ${file.name}`);
-                return { threat: true, type: 'Suspicious File Type', severity: 'High' };
-            }
-            
-            // Check file content if text
-            if (file.textContent) {
-                for (let pattern of maliciousPatterns) {
-                    if (pattern.test(file.textContent)) {
-                        logSecurityEvent('THREAT', `Malicious pattern detected in: ${file.name}`);
-                        return { threat: true, type: 'Malicious Code', severity: 'Critical' };
-                    }
-                }
-            }
-            
-            // Check filename patterns
-            for (let pattern of maliciousPatterns) {
-                if (pattern.test(file.name)) {
-                    logSecurityEvent('THREAT', `Suspicious filename detected: ${file.name}`);
-                    return { threat: true, type: 'Suspicious Filename', severity: 'Medium' };
-                }
-            }
-            
-            return { threat: false, type: 'Clean', severity: 'None' };
-        }
-
-        // Initialize app data with enhanced security
+        // Initialize app data
         function initializeApp() {
+            // Try to load data from localStorage first, then fall back to in-memory
             try {
-                const savedFiles = getFromStorage('cloudvault_files_secure');
+                const savedFiles = localStorage.getItem('cloudvault_files');
                 if (savedFiles) {
-                    const decrypted = simpleDecrypt(savedFiles, 'cloudvault_key_2024');
-                    files = JSON.parse(decrypted);
+                    files = JSON.parse(savedFiles);
                 }
                 
-                const savedPassword = getFromStorage('cloudvault_password');
+                const savedPassword = localStorage.getItem('cloudvault_password');
                 if (savedPassword) {
                     userPassword = savedPassword;
                 }
                 
-                const savedMaster = getFromStorage('cloudvault_master');
-                if (savedMaster) {
-                    masterPassword = savedMaster;
-                }
-                
-                const savedStorage = getFromStorage('cloudvault_storage_limit');
+                const savedStorage = localStorage.getItem('cloudvault_storage_limit');
                 if (savedStorage) {
                     maxStorageGB = parseInt(savedStorage);
                 }
-                
-                const savedSettings = getFromStorage('cloudvault_security_settings');
-                if (savedSettings) {
-                    securitySettings = { ...securitySettings, ...JSON.parse(savedSettings) };
-                }
-
-                logSecurityEvent('INFO', 'Application initialized with Z+ security');
             } catch (error) {
-                logSecurityEvent('ERROR', `Initialization error: ${error.message}`);
+                console.warn('localStorage not available, using memory storage:', error);
+                // Keep default values when localStorage fails
             }
         }
 
-        // File type icons with security indicators
+        // File type icons
         const fileIcons = {
             'image': '???',
             'video': '??',
@@ -1305,12 +819,10 @@
             'txt': '??',
             'zip': '??',
             'folder': '??',
-            'secure_folder': '???',
             'html': '??',
             'css': '??',
             'js': '?',
             'json': '??',
-            'encrypted': '??',
             'default': '??'
         };
 
@@ -1320,8 +832,6 @@
             setupEventListeners();
             updateStorageInfo();
             loadSettings();
-            startSecurityMonitoring();
-            logSecurityEvent('INFO', 'CloudVault Pro Z+ Security loaded');
         });
 
         function setupEventListeners() {
@@ -1355,17 +865,11 @@
             // Search
             document.getElementById('searchInput').addEventListener('input', handleSearch);
 
-            // Activity tracking
-            document.addEventListener('mousemove', updateActivity);
-            document.addEventListener('keypress', updateActivity);
-            document.addEventListener('click', updateActivity);
-
             // Click outside modal to close
             document.addEventListener('click', function(e) {
                 if (e.target.classList.contains('modal')) {
                     closeModal();
                     closeSettings();
-                    closeSecurityCenter();
                 }
             });
         }
@@ -1373,56 +877,15 @@
         function handleLogin(e) {
             e.preventDefault();
             const password = document.getElementById('password').value;
-            const masterKey = document.getElementById('masterPassword').value;
-            
-            if (isLocked) {
-                showStatus('System is locked due to security violations!', 'error');
-                return;
-            }
-            
-            let loginSuccess = false;
             
             if (password === userPassword) {
-                loginSuccess = true;
-                isMasterUser = false;
-            }
-            
-            if (masterKey === masterPassword) {
-                loginSuccess = true;
-                isMasterUser = true;
-                logSecurityEvent('INFO', 'Master user access granted');
-            }
-            
-            if (loginSuccess) {
                 isLoggedIn = true;
-                failedAttempts = 0;
-                document.getElementById('failedAttempts').classList.add('hidden');
                 document.getElementById('loginScreen').style.display = 'none';
                 document.getElementById('mainApp').classList.remove('hidden');
-                
-                encryptionKey = password + (masterKey || '');
-                
-                showStatus(`Welcome to CloudVault Pro! ${isMasterUser ? '(Master Access)' : ''}`, 'success');
+                showStatus('Welcome to CloudVault Pro!', 'success');
                 renderFiles();
-                logSecurityEvent('INFO', `User login successful ${isMasterUser ? '(Master)' : ''}`);
             } else {
-                failedAttempts++;
-                logSecurityEvent('WARNING', `Failed login attempt #${failedAttempts}`);
-                
-                if (failedAttempts >= 5) {
-                    isLocked = true;
-                    logSecurityEvent('CRITICAL', 'System locked due to multiple failed attempts');
-                    showStatus('System locked! Too many failed attempts.', 'error');
-                    setTimeout(() => {
-                        isLocked = false;
-                        failedAttempts = 0;
-                    }, 300000); // 5 minutes lockout
-                } else {
-                    document.getElementById('failedAttempts').classList.remove('hidden');
-                    document.getElementById('attemptCount').textContent = failedAttempts;
-                    showStatus('Incorrect credentials!', 'error');
-                }
-                
+                showStatus('Incorrect password!', 'error');
                 document.getElementById('password').style.borderColor = 'var(--error)';
                 setTimeout(() => {
                     document.getElementById('password').style.borderColor = 'var(--border)';
@@ -1432,57 +895,54 @@
 
         function logout() {
             isLoggedIn = false;
-            isMasterUser = false;
-            encryptionKey = null;
             document.getElementById('loginScreen').style.display = 'flex';
             document.getElementById('mainApp').classList.add('hidden');
             document.getElementById('password').value = '';
-            document.getElementById('masterPassword').value = '';
             selectedFiles.clear();
             currentFolder = null;
-            logSecurityEvent('INFO', 'User logged out');
         }
 
-        function updateActivity() {
-            lastActivity = Date.now();
+        function toggleTheme() {
+            const body = document.body;
+            const currentTheme = body.getAttribute('data-theme');
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            
+            body.setAttribute('data-theme', newTheme);
+            document.getElementById('themeToggle').textContent = newTheme === 'light' ? '??' : '??';
+            
+            saveToStorage('theme', newTheme);
+            showStatus(`Switched to ${newTheme} mode`, 'success');
         }
 
-        function startSecurityMonitoring() {
-            // Auto-lock check
-            setInterval(() => {
-                if (isLoggedIn && Date.now() - lastActivity > autoLockTime * 60 * 1000) {
-                    logSecurityEvent('INFO', 'Auto-lock triggered due to inactivity');
-                    logout();
-                    showStatus('Session locked due to inactivity', 'warning');
-                }
-            }, 30000); // Check every 30 seconds
-
-            // Security status check
-            setInterval(() => {
-                if (Math.random() < 0.1) { // 10% chance per check
-                    showSecurityAlert('??? Security scan completed. All systems secure.');
-                }
-            }, 60000); // Check every minute
+        function handleFileUpload(e) {
+            const selectedFiles = Array.from(e.target.files);
+            uploadFiles(selectedFiles);
         }
 
-        function showSecurityAlert(message) {
-            if (securitySettings.securityAlerts) {
-                const alert = document.getElementById('securityAlert');
-                alert.textContent = message;
-                alert.classList.remove('hidden');
-                setTimeout(() => {
-                    alert.classList.add('hidden');
-                }, 5000);
-            }
+        function handleDragOver(e) {
+            e.preventDefault();
+            document.getElementById('uploadArea').classList.add('dragover');
+        }
+
+        function handleDragLeave() {
+            document.getElementById('uploadArea').classList.remove('dragover');
+        }
+
+        function handleDrop(e) {
+            e.preventDefault();
+            document.getElementById('uploadArea').classList.remove('dragover');
+            const droppedFiles = Array.from(e.dataTransfer.files);
+            uploadFiles(droppedFiles);
         }
 
         function uploadFiles(fileList) {
             const validFiles = fileList.filter(validateFile);
             if (validFiles.length === 0) return;
 
+            // Check storage limit
             const currentSize = files.reduce((sum, file) => sum + (file.size || 0), 0);
             const newFilesSize = validFiles.reduce((sum, file) => sum + file.size, 0);
-            const maxStorage = maxStorageGB * 1024 * 1024 * 1024;
+            const maxStorage = maxStorageGB * 1024 * 1024 * 1024; // Convert GB to bytes
             
             if (currentSize + newFilesSize > maxStorage) {
                 showStatus('Not enough storage space!', 'error');
@@ -1498,15 +958,6 @@
 
             validFiles.forEach((file, index) => {
                 setTimeout(() => {
-                    // Virus scan
-                    const scanResult = virusScan(file);
-                    
-                    if (scanResult.threat && securitySettings.autoQuarantine) {
-                        logSecurityEvent('THREAT', `File quarantined: ${file.name} - ${scanResult.type}`);
-                        showStatus(`?? File quarantined: ${file.name}`, 'error');
-                        return;
-                    }
-
                     const fileData = {
                         id: Date.now() + index,
                         name: file.name,
@@ -1515,26 +966,15 @@
                         uploadDate: new Date().toISOString(),
                         isFavorite: false,
                         parentFolder: currentFolder,
-                        tags: [],
-                        isEncrypted: currentSection === 'secure' || scanResult.threat,
-                        scanResult: scanResult,
-                        securityLevel: isMasterUser ? 'master' : 'standard'
+                        tags: []
                     };
 
                     const reader = new FileReader();
                     reader.onload = function(e) {
-                        let content = e.target.result;
-                        
-                        // Encrypt if needed
-                        if (fileData.isEncrypted && encryptionKey) {
-                            content = 'data:encrypted;base64,' + simpleEncrypt(content, encryptionKey);
-                            logSecurityEvent('INFO', `File encrypted: ${file.name}`);
-                        }
-                        
-                        fileData.dataUrl = content;
+                        fileData.dataUrl = e.target.result;
                         
                         // Extract text content for text files
-                        if (file.type.startsWith('text/') && !fileData.isEncrypted) {
+                        if (file.type.startsWith('text/') || file.name.endsWith('.html') || file.name.endsWith('.css') || file.name.endsWith('.js') || file.name.endsWith('.json')) {
                             try {
                                 fileData.textContent = e.target.result.split(',')[1] ? 
                                     atob(e.target.result.split(',')[1]) : '';
@@ -1556,8 +996,7 @@
                                 progressFill.style.width = '0%';
                                 renderFiles();
                                 updateStorageInfo();
-                                showStatus(`${total} file(s) uploaded and secured!`, 'success');
-                                logSecurityEvent('INFO', `${total} files uploaded successfully`);
+                                showStatus(`${total} file(s) uploaded successfully!`, 'success');
                             }, 500);
                         }
                     };
@@ -1574,22 +1013,11 @@
                 return false;
             }
 
-            // Additional security checks
-            const suspiciousTypes = ['application/x-msdownload', 'application/x-executable'];
-            if (suspiciousTypes.includes(file.type)) {
-                logSecurityEvent('WARNING', `Suspicious file type blocked: ${file.name}`);
-                showStatus(`File type blocked for security: ${file.name}`, 'warning');
-                return false;
-            }
-
             return true;
         }
 
         function getFileIcon(file) {
-            if (file.isFolder) {
-                return file.isSecure ? fileIcons.secure_folder : fileIcons.folder;
-            }
-            if (file.isEncrypted) return fileIcons.encrypted;
+            if (file.isFolder) return fileIcons.folder;
             if (file.type && file.type.startsWith('image/')) return fileIcons.image;
             if (file.type && file.type.startsWith('video/')) return fileIcons.video;
             if (file.type && file.type.startsWith('audio/')) return fileIcons.audio;
@@ -1602,6 +1030,14 @@
             if (file.type === 'text/plain') return fileIcons.txt;
             if (file.type && (file.type.includes('zip') || file.type.includes('compressed'))) return fileIcons.zip;
             return fileIcons.default;
+        }
+
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
         }
 
         function renderFiles() {
@@ -1619,8 +1055,6 @@
                 );
             } else if (currentSection === 'videos') {
                 filteredFiles = filteredFiles.filter(file => file.type && file.type.startsWith('video/'));
-            } else if (currentSection === 'secure') {
-                filteredFiles = filteredFiles.filter(file => file.isEncrypted || file.isSecure);
             } else if (currentSection === 'recent') {
                 filteredFiles = files.filter(file => !file.isDeleted)
                     .sort((a, b) => new Date(b.uploadDate) - new Date(a.uploadDate)).slice(0, 20);
@@ -1645,7 +1079,7 @@
 
             filteredFiles.forEach(file => {
                 const card = document.createElement('div');
-                card.className = `file-card ${file.isEncrypted ? 'encrypted' : ''}`;
+                card.className = 'file-card';
                 card.dataset.fileId = file.id;
                 card.onclick = (e) => {
                     if (e.ctrlKey || e.metaKey) {
@@ -1662,32 +1096,11 @@
                     card.classList.add('selected');
                 }
                 
-                let indicators = '';
-                if (file.isEncrypted) {
-                    indicators += '<div class="encryption-indicator">?? ENCRYPTED</div>';
-                }
-                if (file.scanResult && file.scanResult.type === 'Clean') {
-                    indicators += '<div class="virus-scan-status">? CLEAN</div>';
-                } else if (file.scanResult && file.scanResult.threat) {
-                    indicators += '<div class="virus-scan-status" style="background: var(--error);">?? THREAT</div>';
-                }
-                
                 card.innerHTML = `
-                    ${indicators}
                     <div class="file-actions">
                         <button class="action-btn" onclick="event.stopPropagation(); toggleFavorite(${file.id})" title="Toggle favorite">
                             ${file.isFavorite ? '?' : '?'}
                         </button>
-                        ${!file.isFolder && file.isEncrypted ? `
-                        <button class="action-btn" onclick="event.stopPropagation(); decryptFile(${file.id})" title="Decrypt">
-                            ??
-                        </button>
-                        ` : ''}
-                        ${!file.isFolder && !file.isEncrypted ? `
-                        <button class="action-btn" onclick="event.stopPropagation(); encryptFile(${file.id})" title="Encrypt">
-                            ??
-                        </button>
-                        ` : ''}
                         ${!file.isFolder ? `
                         <button class="action-btn" onclick="event.stopPropagation(); downloadFile(${file.id})" title="Download">
                             ??
@@ -1697,7 +1110,7 @@
                             ???
                         </button>
                     </div>
-                    <div class="file-icon ${file.isFolder ? (file.isSecure ? 'secure-icon' : 'folder-icon') : (file.isEncrypted ? 'secure-icon' : '')}">${getFileIcon(file)}</div>
+                    <div class="file-icon ${file.isFolder ? 'folder-icon' : ''}">${getFileIcon(file)}</div>
                     <div class="file-name">${escapeHtml(file.name)}</div>
                     <div class="file-size">${file.isFolder ? getFolderSize(file.id) : formatFileSize(file.size)}</div>
                 `;
@@ -1706,384 +1119,6 @@
             });
 
             updateBulkActions();
-        }
-
-        // Security functions
-        function encryptFile(fileId) {
-            if (!encryptionKey) {
-                showStatus('Encryption key not available. Please re-login.', 'error');
-                return;
-            }
-            
-            const file = files.find(f => f.id === fileId);
-            if (file && !file.isEncrypted) {
-                if (file.dataUrl && !file.dataUrl.startsWith('data:encrypted;')) {
-                    file.dataUrl = 'data:encrypted;base64,' + simpleEncrypt(file.dataUrl, encryptionKey);
-                    file.isEncrypted = true;
-                    saveFiles();
-                    renderFiles();
-                    showStatus(`File encrypted: ${file.name}`, 'success');
-                    logSecurityEvent('INFO', `File encrypted: ${file.name}`);
-                }
-            }
-        }
-
-        function decryptFile(fileId) {
-            if (!encryptionKey) {
-                showStatus('Decryption key not available. Please re-login.', 'error');
-                return;
-            }
-            
-            const file = files.find(f => f.id === fileId);
-            if (file && file.isEncrypted) {
-                try {
-                    if (file.dataUrl && file.dataUrl.startsWith('data:encrypted;base64,')) {
-                        const encryptedData = file.dataUrl.replace('data:encrypted;base64,', '');
-                        file.dataUrl = simpleDecrypt(encryptedData, encryptionKey);
-                        file.isEncrypted = false;
-                        saveFiles();
-                        renderFiles();
-                        showStatus(`File decrypted: ${file.name}`, 'success');
-                        logSecurityEvent('INFO', `File decrypted: ${file.name}`);
-                    }
-                } catch (error) {
-                    showStatus('Decryption failed. Invalid key or corrupted data.', 'error');
-                    logSecurityEvent('ERROR', `Decryption failed for: ${file.name}`);
-                }
-            }
-        }
-
-        function bulkEncrypt() {
-            if (!encryptionKey) {
-                showStatus('Encryption key not available. Please re-login.', 'error');
-                return;
-            }
-            
-            let encrypted = 0;
-            selectedFiles.forEach(fileId => {
-                const file = files.find(f => f.id === fileId);
-                if (file && !file.isEncrypted && !file.isFolder) {
-                    encryptFile(fileId);
-                    encrypted++;
-                }
-            });
-            
-            if (encrypted > 0) {
-                showStatus(`Encrypted ${encrypted} files`, 'success');
-                logSecurityEvent('INFO', `Bulk encrypted ${encrypted} files`);
-                clearSelection();
-            }
-        }
-
-        function createSecureFolder() {
-            const name = prompt('Enter secure folder name:');
-            if (name && name.trim()) {
-                const folder = {
-                    id: Date.now(),
-                    name: name.trim(),
-                    type: 'folder',
-                    size: 0,
-                    uploadDate: new Date().toISOString(),
-                    isFavorite: false,
-                    isFolder: true,
-                    isSecure: true,
-                    parentFolder: currentFolder,
-                    securityLevel: 'high'
-                };
-                files.push(folder);
-                saveFiles();
-                renderFiles();
-                showStatus('Secure folder created successfully', 'success');
-                logSecurityEvent('INFO', `Secure folder created: ${name}`);
-            }
-        }
-
-        function virusScanAll() {
-            showStatus('Starting virus scan...', 'success');
-            logSecurityEvent('INFO', 'Full virus scan initiated');
-            
-            let scanned = 0;
-            let threats = 0;
-            
-            files.forEach(file => {
-                if (!file.isFolder) {
-                    const scanResult = virusScan(file);
-                    file.scanResult = scanResult;
-                    scanned++;
-                    
-                    if (scanResult.threat) {
-                        threats++;
-                        if (securitySettings.autoQuarantine) {
-                            file.isQuarantined = true;
-                            logSecurityEvent('THREAT', `File quarantined: ${file.name}`);
-                        }
-                    }
-                }
-            });
-            
-            saveFiles();
-            renderFiles();
-            
-            showStatus(`Scan complete: ${scanned} files scanned, ${threats} threats found`, 
-                      threats > 0 ? 'warning' : 'success');
-            
-            logSecurityEvent('INFO', `Virus scan completed: ${scanned} files, ${threats} threats`);
-            updateSecurityStatus();
-        }
-
-        function quickSecurityScan() {
-            showStatus('Running security scan...', 'success');
-            logSecurityEvent('INFO', 'Quick security scan initiated');
-            
-            setTimeout(() => {
-                const recentFiles = files.filter(f => 
-                    new Date(f.uploadDate) > new Date(Date.now() - 24 * 60 * 60 * 1000)
-                );
-                
-                let threats = 0;
-                recentFiles.forEach(file => {
-                    if (!file.isFolder) {
-                        const scanResult = virusScan(file);
-                        if (scanResult.threat) threats++;
-                    }
-                });
-                
-                document.getElementById('lastScanTime').textContent = new Date().toLocaleString();
-                document.getElementById('threatsFound').textContent = `${threats} threats found`;
-                
-                showStatus(`Security scan complete: ${threats} threats detected`, 
-                          threats > 0 ? 'warning' : 'success');
-                logSecurityEvent('INFO', `Quick scan completed: ${threats} threats found`);
-            }, 2000);
-        }
-
-        function fullSystemScan() {
-            showStatus('Starting full system scan...', 'success');
-            logSecurityEvent('INFO', 'Full system scan initiated');
-            
-            setTimeout(() => {
-                virusScanAll();
-                showStatus('Full system scan completed', 'success');
-            }, 3000);
-        }
-
-        function encryptAllFiles() {
-            if (!encryptionKey) {
-                showStatus('Encryption key not available. Please re-login.', 'error');
-                return;
-            }
-            
-            let encrypted = 0;
-            files.forEach(file => {
-                if (!file.isFolder && !file.isEncrypted) {
-                    encryptFile(file.id);
-                    encrypted++;
-                }
-            });
-            
-            updateSecurityStatus();
-            showStatus(`Encrypted ${encrypted} files`, 'success');
-            logSecurityEvent('INFO', `Mass encryption completed: ${encrypted} files`);
-        }
-
-        function updateSecurityStatus() {
-            const encryptedFiles = files.filter(f => !f.isFolder && f.isEncrypted).length;
-            const totalFiles = files.filter(f => !f.isFolder).length;
-            
-            document.getElementById('encryptedCount').textContent = 
-                `${encryptedFiles}/${totalFiles} files encrypted`;
-        }
-
-        // Settings functions
-        function openSettings() {
-            const modal = document.getElementById('settingsModal');
-            const autoDarkMode = document.getElementById('autoDarkMode');
-            const storageLimitInput = document.getElementById('storageLimitInput');
-            const twoFactorAuth = document.getElementById('twoFactorAuth');
-            const realtimeScanning = document.getElementById('realtimeScanning');
-            const autoQuarantine = document.getElementById('autoQuarantine');
-            const encryptionLevel = document.getElementById('encryptionLevel');
-            const securityAlerts = document.getElementById('securityAlerts');
-            const autoBackup = document.getElementById('autoBackup');
-            const autoLockTime = document.getElementById('autoLockTime');
-            
-            autoDarkMode.checked = getFromStorage('autoDarkMode') === 'true';
-            storageLimitInput.value = maxStorageGB;
-            twoFactorAuth.checked = securitySettings.twoFactorAuth;
-            realtimeScanning.checked = securitySettings.realtimeScanning;
-            autoQuarantine.checked = securitySettings.autoQuarantine;
-            encryptionLevel.value = securitySettings.encryptionLevel;
-            securityAlerts.checked = securitySettings.securityAlerts;
-            autoBackup.checked = securitySettings.autoBackup;
-            autoLockTime.value = window.autoLockTime;
-            
-            modal.classList.add('show');
-        }
-
-        function closeSettings() {
-            document.getElementById('settingsModal').classList.remove('show');
-        }
-
-        function openSecurityCenter() {
-            updateSecurityStatus();
-            updateSecurityLogs();
-            document.getElementById('securityModal').classList.add('show');
-        }
-
-        function closeSecurityCenter() {
-            document.getElementById('securityModal').classList.remove('show');
-        }
-
-        function changePassword() {
-            const currentPassword = prompt('Enter current password:');
-            if (currentPassword !== userPassword) {
-                showStatus('Incorrect current password', 'error');
-                logSecurityEvent('WARNING', 'Failed password change attempt');
-                return;
-            }
-
-            const newPassword = prompt('Enter new password:');
-            if (newPassword && newPassword.length >= 6) {
-                const confirmPassword = prompt('Confirm new password:');
-                if (newPassword === confirmPassword) {
-                    userPassword = newPassword;
-                    saveToStorage('cloudvault_password', newPassword);
-                    showStatus('Password changed successfully', 'success');
-                    logSecurityEvent('INFO', 'Password changed successfully');
-                } else {
-                    showStatus('Passwords do not match', 'error');
-                }
-            } else {
-                showStatus('Password must be at least 6 characters', 'error');
-            }
-        }
-
-        function changeMasterKey() {
-            if (!isMasterUser) {
-                showStatus('Master access required', 'error');
-                return;
-            }
-            
-            const currentMaster = prompt('Enter current master key:');
-            if (currentMaster !== masterPassword) {
-                showStatus('Incorrect current master key', 'error');
-                logSecurityEvent('WARNING', 'Failed master key change attempt');
-                return;
-            }
-
-            const newMaster = prompt('Enter new master key:');
-            if (newMaster && newMaster.length >= 10) {
-                const confirmMaster = prompt('Confirm new master key:');
-                if (newMaster === confirmMaster) {
-                    masterPassword = newMaster;
-                    saveToStorage('cloudvault_master', newMaster);
-                    showStatus('Master key changed successfully', 'success');
-                    logSecurityEvent('INFO', 'Master key changed successfully');
-                } else {
-                    showStatus('Master keys do not match', 'error');
-                }
-            } else {
-                showStatus('Master key must be at least 10 characters', 'error');
-            }
-        }
-
-        function toggleTwoFactor() {
-            securitySettings.twoFactorAuth = document.getElementById('twoFactorAuth').checked;
-            saveSecuritySettings();
-            showStatus(`Two-factor authentication ${securitySettings.twoFactorAuth ? 'enabled' : 'disabled'}`, 'success');
-            logSecurityEvent('INFO', `2FA ${securitySettings.twoFactorAuth ? 'enabled' : 'disabled'}`);
-        }
-
-        function updateAutoLock() {
-            const newTime = parseInt(document.getElementById('autoLockTime').value);
-            if (newTime >= 1 && newTime <= 60) {
-                window.autoLockTime = newTime;
-                saveToStorage('cloudvault_autolock', newTime.toString());
-                showStatus(`Auto-lock set to ${newTime} minutes`, 'success');
-                logSecurityEvent('INFO', `Auto-lock time updated: ${newTime} minutes`);
-            } else {
-                showStatus('Auto-lock time must be between 1-60 minutes', 'error');
-            }
-        }
-
-        function updateEncryption() {
-            securitySettings.encryptionLevel = document.getElementById('encryptionLevel').value;
-            saveSecuritySettings();
-            showStatus(`Encryption level updated to ${securitySettings.encryptionLevel.toUpperCase()}`, 'success');
-            logSecurityEvent('INFO', `Encryption level updated: ${securitySettings.encryptionLevel}`);
-        }
-
-        function toggleRealtimeScanning() {
-            securitySettings.realtimeScanning = document.getElementById('realtimeScanning').checked;
-            saveSecuritySettings();
-            showStatus(`Real-time scanning ${securitySettings.realtimeScanning ? 'enabled' : 'disabled'}`, 'success');
-        }
-
-        function toggleAutoQuarantine() {
-            securitySettings.autoQuarantine = document.getElementById('autoQuarantine').checked;
-            saveSecuritySettings();
-            showStatus(`Auto-quarantine ${securitySettings.autoQuarantine ? 'enabled' : 'disabled'}`, 'success');
-        }
-
-        function toggleSecurityAlerts() {
-            securitySettings.securityAlerts = document.getElementById('securityAlerts').checked;
-            saveSecuritySettings();
-            showStatus(`Security alerts ${securitySettings.securityAlerts ? 'enabled' : 'disabled'}`, 'success');
-        }
-
-        function toggleAutoBackup() {
-            securitySettings.autoBackup = document.getElementById('autoBackup').checked;
-            saveSecuritySettings();
-            showStatus(`Auto-backup ${securitySettings.autoBackup ? 'enabled' : 'disabled'}`, 'success');
-            
-            if (securitySettings.autoBackup) {
-                // Schedule daily backup
-                setInterval(backupData, 24 * 60 * 60 * 1000);
-            }
-        }
-
-        function saveSecuritySettings() {
-            saveToStorage('cloudvault_security_settings', JSON.stringify(securitySettings));
-        }
-
-        // Enhanced utility functions
-        function saveToStorage(key, value) {
-            try {
-                localStorage.setItem(key, value);
-            } catch (error) {
-                console.warn(`Could not save ${key} to localStorage:`, error);
-                window[`_cloudvault_${key}`] = value;
-            }
-        }
-
-        function getFromStorage(key) {
-            try {
-                return localStorage.getItem(key) || window[`_cloudvault_${key}`] || null;
-            } catch (error) {
-                console.warn(`Could not get ${key} from localStorage:`, error);
-                return window[`_cloudvault_${key}`] || null;
-            }
-        }
-
-        function saveFiles() {
-            try {
-                const encrypted = simpleEncrypt(JSON.stringify(files), 'cloudvault_key_2024');
-                localStorage.setItem('cloudvault_files_secure', encrypted);
-            } catch (error) {
-                console.warn('Could not save files to localStorage:', error);
-                window._cloudvault_files = files;
-                showStatus('Warning: Changes saved in memory only', 'warning');
-            }
-        }
-
-        // Continue with all other existing functions from the original code...
-        
-        function formatFileSize(bytes) {
-            if (bytes === 0) return '0 Bytes';
-            const k = 1024;
-            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
-            const i = Math.floor(Math.log(bytes) / Math.log(k));
-            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
         }
 
         function getFolderSize(folderId) {
@@ -2115,30 +1150,6 @@
         }
 
         function openFile(file) {
-            // If file is encrypted, try to decrypt first
-            if (file.isEncrypted && encryptionKey) {
-                try {
-                    const tempFile = { ...file };
-                    if (tempFile.dataUrl && tempFile.dataUrl.startsWith('data:encrypted;base64,')) {
-                        const encryptedData = tempFile.dataUrl.replace('data:encrypted;base64,', '');
-                        tempFile.dataUrl = simpleDecrypt(encryptedData, encryptionKey);
-                        tempFile.isEncrypted = false;
-                        showFileModal(tempFile);
-                        return;
-                    }
-                } catch (error) {
-                    showStatus('Cannot decrypt file. Invalid key.', 'error');
-                    return;
-                }
-            } else if (file.isEncrypted) {
-                showStatus('File is encrypted. Please re-login to decrypt.', 'warning');
-                return;
-            }
-            
-            showFileModal(file);
-        }
-
-        function showFileModal(file) {
             const modal = document.getElementById('fileModal');
             const modalContent = document.getElementById('modalContent');
             const title = document.getElementById('modalTitle');
@@ -2151,13 +1162,11 @@
                     <p><strong>Size:</strong> ${formatFileSize(file.size)}</p>
                     <p><strong>Type:</strong> ${file.type || 'Unknown'}</p>
                     <p><strong>Upload Date:</strong> ${new Date(file.uploadDate).toLocaleDateString()}</p>
-                    ${file.isEncrypted ? '<p><strong>Status:</strong> ?? Encrypted</p>' : ''}
-                    ${file.scanResult ? `<p><strong>Security:</strong> ${file.scanResult.threat ? '?? Threat Detected' : '? Clean'}</p>` : ''}
                 </div>
             `;
             
-            // Rest of the file display logic remains the same as original...
             if (file.type && file.type.startsWith('image/')) {
+                // Image preview
                 modalContent.classList.add('modal-large');
                 contentHtml += `
                     <div class="image-viewer">
@@ -2168,12 +1177,91 @@
                         </div>
                     </div>
                 `;
+                
+            } else if (file.type && file.type.startsWith('video/')) {
+                // Video player
+                modalContent.classList.add('modal-large');
+                contentHtml += `
+                    <div style="text-align: center;">
+                        <video src="${file.dataUrl}" controls style="max-width: 100%; max-height: 60vh; border-radius: 0.5rem;">
+                            Your browser does not support video playback.
+                        </video>
+                        <div style="margin-top: 1rem; display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+                            <button class="btn" onclick="downloadFile(${file.id})">?? Download</button>
+                        </div>
+                    </div>
+                `;
+                
+            } else if (file.type && file.type.startsWith('audio/')) {
+                // Audio player
+                contentHtml += `
+                    <div style="text-align: center; padding: 2rem; background: var(--surface); border-radius: 0.5rem;">
+                        <div style="font-size: 3rem; margin-bottom: 1rem;">??</div>
+                        <audio src="${file.dataUrl}" controls style="width: 100%;" preload="metadata">
+                            Your browser does not support audio playback.
+                        </audio>
+                        <div style="margin-top: 1rem;">
+                            <button class="btn" onclick="downloadFile(${file.id})">?? Download</button>
+                        </div>
+                    </div>
+                `;
+                
+            } else if (file.type === 'application/pdf') {
+                // PDF viewer
+                modalContent.classList.add('modal-large');
+                contentHtml += `
+                    <div style="text-align: center;">
+                        <iframe src="${file.dataUrl}" class="pdf-viewer">
+                            Your browser does not support PDF viewing.
+                        </iframe>
+                        <div style="margin-top: 1rem;">
+                            <button class="btn" onclick="openInNewTab('${file.dataUrl}')">?? Open in New Tab</button>
+                            <button class="btn" onclick="downloadFile(${file.id})">?? Download</button>
+                        </div>
+                    </div>
+                `;
+                
+            } else if (isCodeFile(file) && file.textContent) {
+                // Code file viewer
+                modalContent.classList.add('modal-large');
+                const codeContent = file.textContent || '';
+                const language = getCodeLanguage(file.name);
+                contentHtml += `
+                    <div>
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; flex-wrap: wrap; gap: 1rem;">
+                            <span style="font-weight: 500;">?? ${language.toUpperCase()} Code</span>
+                            <div style="display: flex; gap: 1rem;">
+                                <button class="btn btn-secondary" onclick="copyToClipboard('${escapeForJs(codeContent)}')">?? Copy</button>
+                                <button class="btn" onclick="editCodeFile('${file.id}')">?? Edit</button>
+                            </div>
+                        </div>
+                        <pre style="background: var(--background); padding: 1rem; border-radius: 0.5rem; overflow: auto; max-height: 500px; white-space: pre-wrap; font-family: 'Courier New', monospace; font-size: 0.875rem; line-height: 1.4; border: 1px solid var(--border);"><code>${escapeHtml(codeContent)}</code></pre>
+                    </div>
+                `;
+                
+            } else if ((file.type === 'text/plain' || (file.type && file.type.startsWith('text/'))) && file.textContent) {
+                // Text file viewer
+                const textContent = file.textContent || '';
+                contentHtml += `
+                    <div>
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; flex-wrap: wrap; gap: 1rem;">
+                            <span style="font-weight: 500;">?? Text Content</span>
+                            <div style="display: flex; gap: 1rem;">
+                                <button class="btn btn-secondary" onclick="copyToClipboard('${escapeForJs(textContent)}')">?? Copy</button>
+                                <button class="btn" onclick="editTextFile('${file.id}')">?? Edit</button>
+                            </div>
+                        </div>
+                        <pre style="background: var(--surface); padding: 1rem; border-radius: 0.5rem; overflow: auto; max-height: 400px; white-space: pre-wrap; font-family: 'Courier New', monospace; font-size: 0.875rem; line-height: 1.4; border: 1px solid var(--border);">${escapeHtml(textContent)}</pre>
+                    </div>
+                `;
+                
             } else {
-                // Generic file display
+                // Generic file
                 contentHtml += `
                     <div style="text-align: center; padding: 2rem; background: var(--surface); border-radius: 0.5rem;">
                         <div style="font-size: 3rem; margin-bottom: 1rem;">${getFileIcon(file)}</div>
-                        <p>${file.isEncrypted ? 'Encrypted file' : 'File preview not available'}</p>
+                        <p>File preview not available</p>
+                        <p style="color: var(--text-secondary); margin-top: 0.5rem;">This file type cannot be previewed in the browser</p>
                         <div style="margin-top: 1rem;">
                             <button class="btn" onclick="downloadFile(${file.id})">?? Download File</button>
                         </div>
@@ -2192,7 +1280,7 @@
             modalContent.classList.remove('modal-large');
         }
 
-        // All other functions remain the same (toggleFavorite, downloadFile, deleteFile, etc.)
+        // File action functions
         function toggleFavorite(fileId) {
             const file = files.find(f => f.id === fileId);
             if (file) {
@@ -2206,29 +1294,13 @@
         function downloadFile(fileId) {
             const file = files.find(f => f.id === fileId);
             if (file && file.dataUrl) {
-                let downloadUrl = file.dataUrl;
-                
-                // Decrypt if needed
-                if (file.isEncrypted && encryptionKey) {
-                    try {
-                        if (downloadUrl.startsWith('data:encrypted;base64,')) {
-                            const encryptedData = downloadUrl.replace('data:encrypted;base64,', '');
-                            downloadUrl = simpleDecrypt(encryptedData, encryptionKey);
-                        }
-                    } catch (error) {
-                        showStatus('Cannot decrypt file for download', 'error');
-                        return;
-                    }
-                }
-                
                 const a = document.createElement('a');
-                a.href = downloadUrl;
+                a.href = file.dataUrl;
                 a.download = file.name;
                 document.body.appendChild(a);
                 a.click();
                 document.body.removeChild(a);
                 showStatus('Download started', 'success');
-                logSecurityEvent('INFO', `File downloaded: ${file.name}`);
             }
         }
 
@@ -2236,13 +1308,13 @@
             const file = files.find(f => f.id === fileId);
             if (file) {
                 if (currentSection === 'trash') {
+                    // Permanently delete
                     files = files.filter(f => f.id !== fileId);
                     showStatus('File permanently deleted', 'success');
-                    logSecurityEvent('INFO', `File permanently deleted: ${file.name}`);
                 } else {
+                    // Move to trash
                     file.isDeleted = true;
                     showStatus('File moved to trash', 'success');
-                    logSecurityEvent('INFO', `File moved to trash: ${file.name}`);
                 }
                 saveFiles();
                 renderFiles();
@@ -2250,6 +1322,112 @@
             }
         }
 
+        // File editing functions
+        function editCodeFile(fileId) {
+            const file = files.find(f => f.id == fileId);
+            if (!file) return;
+            
+            const codeContent = file.textContent || '';
+            
+            const modal = document.getElementById('fileModal');
+            const modalContent = document.getElementById('modalContent');
+            const body = document.getElementById('modalBody');
+            
+            modalContent.classList.add('modal-large');
+            body.innerHTML = `
+                <div>
+                    <h4>Edit Code File: ${escapeHtml(file.name)}</h4>
+                    <textarea class="code-editor" id="codeEditor" placeholder="Enter code...">${escapeHtml(codeContent)}</textarea>
+                    <div style="margin-top: 1rem; display: flex; gap: 1rem; justify-content: flex-end;">
+                        <button class="btn btn-secondary" onclick="openFile(files.find(f => f.id === ${fileId}))">Cancel</button>
+                        <button class="btn" onclick="saveCodeFile('${fileId}')">?? Save</button>
+                    </div>
+                </div>
+            `;
+        }
+
+        function saveCodeFile(fileId) {
+            const file = files.find(f => f.id == fileId);
+            if (!file) return;
+            
+            const newContent = document.getElementById('codeEditor').value;
+            
+            file.textContent = newContent;
+            const mimeType = file.type || 'text/plain';
+            file.dataUrl = 'data:' + mimeType + ';base64,' + btoa(unescape(encodeURIComponent(newContent)));
+            
+            saveFiles();
+            showStatus('Code file saved successfully!', 'success');
+            openFile(file);
+        }
+
+        function editTextFile(fileId) {
+            const file = files.find(f => f.id == fileId);
+            if (!file) return;
+            
+            const textContent = file.textContent || '';
+            
+            const modal = document.getElementById('fileModal');
+            const modalContent = document.getElementById('modalContent');
+            const body = document.getElementById('modalBody');
+            
+            modalContent.classList.add('modal-large');
+            body.innerHTML = `
+                <div>
+                    <h4>Edit Text File: ${escapeHtml(file.name)}</h4>
+                    <textarea class="code-editor" id="textEditor" placeholder="Enter text...">${escapeHtml(textContent)}</textarea>
+                    <div style="margin-top: 1rem; display: flex; gap: 1rem; justify-content: flex-end;">
+                        <button class="btn btn-secondary" onclick="openFile(files.find(f => f.id === ${fileId}))">Cancel</button>
+                        <button class="btn" onclick="saveTextFile('${fileId}')">?? Save</button>
+                    </div>
+                </div>
+            `;
+        }
+
+        function saveTextFile(fileId) {
+            const file = files.find(f => f.id == fileId);
+            if (!file) return;
+            
+            const newContent = document.getElementById('textEditor').value;
+            
+            file.textContent = newContent;
+            file.dataUrl = 'data:text/plain;base64,' + btoa(unescape(encodeURIComponent(newContent)));
+            
+            saveFiles();
+            showStatus('Text file saved successfully!', 'success');
+            openFile(file);
+        }
+
+        function openInNewTab(url) {
+            window.open(url, '_blank');
+        }
+
+        function openFullscreen(src, type) {
+            const fullscreenDiv = document.createElement('div');
+            fullscreenDiv.style.cssText = `
+                position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+                background: rgba(0,0,0,0.9); z-index: 2000; display: flex; 
+                align-items: center; justify-content: center; cursor: pointer;
+            `;
+            
+            let content;
+            if (type === 'image') {
+                content = `<img src="${src}" style="max-width: 95%; max-height: 95%; object-fit: contain; border-radius: 0.5rem;">`;
+            } else if (type === 'video') {
+                content = `<video src="${src}" controls autoplay style="max-width: 95%; max-height: 95%; border-radius: 0.5rem;">`;
+            }
+            
+            fullscreenDiv.innerHTML = content + '<div style="position: absolute; top: 20px; right: 30px; color: white; font-size: 2rem; cursor: pointer; user-select: none;">?</div>';
+            
+            fullscreenDiv.onclick = (e) => {
+                if (e.target === fullscreenDiv || e.target.textContent === '?') {
+                    document.body.removeChild(fullscreenDiv);
+                }
+            };
+            document.body.appendChild(fullscreenDiv);
+        }
+
+        // Folder functions
         function createFolder() {
             const name = prompt('Enter folder name:');
             if (name && name.trim()) {
@@ -2270,6 +1448,7 @@
             }
         }
 
+        // Search function
         function handleSearch() {
             const query = document.getElementById('searchInput').value.toLowerCase();
             
@@ -2304,7 +1483,7 @@
 
             results.forEach(file => {
                 const card = document.createElement('div');
-                card.className = `file-card ${file.isEncrypted ? 'encrypted' : ''}`;
+                card.className = 'file-card';
                 card.onclick = () => {
                     if (file.isFolder) {
                         navigateToFolder(file.id);
@@ -2314,7 +1493,20 @@
                 };
                 
                 card.innerHTML = `
-                    <div class="file-icon ${file.isFolder ? (file.isSecure ? 'secure-icon' : 'folder-icon') : (file.isEncrypted ? 'secure-icon' : '')}">${getFileIcon(file)}</div>
+                    <div class="file-actions">
+                        <button class="action-btn" onclick="event.stopPropagation(); toggleFavorite(${file.id})" title="Toggle favorite">
+                            ${file.isFavorite ? '?' : '?'}
+                        </button>
+                        ${!file.isFolder ? `
+                        <button class="action-btn" onclick="event.stopPropagation(); downloadFile(${file.id})" title="Download">
+                            ??
+                        </button>
+                        ` : ''}
+                        <button class="action-btn" onclick="event.stopPropagation(); deleteFile(${file.id})" title="Delete">
+                            ???
+                        </button>
+                    </div>
+                    <div class="file-icon ${file.isFolder ? 'folder-icon' : ''}">${getFileIcon(file)}</div>
                     <div class="file-name">${highlightMatch(escapeHtml(file.name), escapeHtml(query))}</div>
                     <div class="file-size">${file.isFolder ? getFolderSize(file.id) : formatFileSize(file.size)}</div>
                 `;
@@ -2329,6 +1521,7 @@
             return text.replace(regex, '<mark style="background: var(--primary-color); color: white; padding: 0.1rem 0.2rem; border-radius: 0.2rem;">$1</mark>');
         }
 
+        // Selection functions
         function toggleFileSelection(fileId) {
             if (selectedFiles.has(fileId)) {
                 selectedFiles.delete(fileId);
@@ -2400,37 +1593,42 @@
             renderFiles();
         }
 
-        function toggleTheme() {
-            const body = document.body;
-            const currentTheme = body.getAttribute('data-theme');
-            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+        // Settings functions
+        function openSettings() {
+            const modal = document.getElementById('settingsModal');
+            const autoDarkMode = document.getElementById('autoDarkMode');
+            const storageLimitInput = document.getElementById('storageLimitInput');
             
-            body.setAttribute('data-theme', newTheme);
-            document.getElementById('themeToggle').textContent = newTheme === 'light' ? '??' : '??';
+            autoDarkMode.checked = getFromStorage('autoDarkMode') === 'true';
+            storageLimitInput.value = maxStorageGB;
             
-            saveToStorage('theme', newTheme);
-            showStatus(`Switched to ${newTheme} mode`, 'success');
+            modal.classList.add('show');
         }
 
-        function handleFileUpload(e) {
-            const selectedFiles = Array.from(e.target.files);
-            uploadFiles(selectedFiles);
+        function closeSettings() {
+            document.getElementById('settingsModal').classList.remove('show');
         }
 
-        function handleDragOver(e) {
-            e.preventDefault();
-            document.getElementById('uploadArea').classList.add('dragover');
-        }
+        function changePassword() {
+            const currentPassword = prompt('Enter current password:');
+            if (currentPassword !== userPassword) {
+                showStatus('Incorrect current password', 'error');
+                return;
+            }
 
-        function handleDragLeave() {
-            document.getElementById('uploadArea').classList.remove('dragover');
-        }
-
-        function handleDrop(e) {
-            e.preventDefault();
-            document.getElementById('uploadArea').classList.remove('dragover');
-            const droppedFiles = Array.from(e.dataTransfer.files);
-            uploadFiles(droppedFiles);
+            const newPassword = prompt('Enter new password:');
+            if (newPassword && newPassword.length >= 6) {
+                const confirmPassword = prompt('Confirm new password:');
+                if (newPassword === confirmPassword) {
+                    userPassword = newPassword;
+                    saveToStorage('cloudvault_password', newPassword);
+                    showStatus('Password changed successfully', 'success');
+                } else {
+                    showStatus('Passwords do not match', 'error');
+                }
+            } else {
+                showStatus('Password must be at least 6 characters', 'error');
+            }
         }
 
         function updateStorageLimit() {
@@ -2465,13 +1663,10 @@
                     theme: getFromStorage('theme'),
                     autoDarkMode: getFromStorage('autoDarkMode'),
                     storageLimit: maxStorageGB,
-                    password: userPassword,
-                    masterPassword: isMasterUser ? masterPassword : null,
-                    securitySettings: securitySettings
+                    password: userPassword
                 },
-                securityLogs: securityLogs,
                 timestamp: new Date().toISOString(),
-                version: '3.0-secure'
+                version: '2.0'
             };
             
             const dataStr = JSON.stringify(exportData, null, 2);
@@ -2479,13 +1674,12 @@
             
             const link = document.createElement('a');
             link.href = URL.createObjectURL(dataBlob);
-            link.download = `cloudvault-secure-export-${new Date().toISOString().split('T')[0]}.json`;
+            link.download = `cloudvault-export-${new Date().toISOString().split('T')[0]}.json`;
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
             
-            showStatus('Secure data exported successfully', 'success');
-            logSecurityEvent('INFO', 'Data exported with security metadata');
+            showStatus('Data exported successfully', 'success');
         }
 
         function toggleAutoDarkMode() {
@@ -2520,6 +1714,7 @@
             }
         }
 
+        // View toggle function
         function toggleView() {
             const grid = document.getElementById('filesGrid');
             const btn = event.target;
@@ -2535,6 +1730,7 @@
             }
         }
 
+        // Backup and restore functions
         function backupData() {
             const backup = {
                 files: files,
@@ -2542,13 +1738,10 @@
                     theme: getFromStorage('theme'),
                     autoDarkMode: getFromStorage('autoDarkMode'),
                     storageLimit: maxStorageGB,
-                    password: userPassword,
-                    masterPassword: isMasterUser ? masterPassword : null,
-                    securitySettings: securitySettings
+                    password: userPassword
                 },
-                securityLogs: securityLogs,
                 timestamp: new Date().toISOString(),
-                version: '3.0-secure'
+                version: '2.0'
             };
             
             const dataStr = JSON.stringify(backup, null, 2);
@@ -2561,8 +1754,7 @@
             link.click();
             document.body.removeChild(link);
             
-            showStatus('Secure backup created successfully', 'success');
-            logSecurityEvent('INFO', 'Secure backup created');
+            showStatus('Backup created successfully', 'success');
         }
 
         function restoreData() {
@@ -2602,25 +1794,12 @@
                                         userPassword = backup.settings.password;
                                         saveToStorage('cloudvault_password', userPassword);
                                     }
-                                    if (backup.settings.masterPassword && isMasterUser) {
-                                        masterPassword = backup.settings.masterPassword;
-                                        saveToStorage('cloudvault_master', masterPassword);
-                                    }
-                                    if (backup.settings.securitySettings) {
-                                        securitySettings = { ...securitySettings, ...backup.settings.securitySettings };
-                                        saveSecuritySettings();
-                                    }
-                                }
-                                
-                                if (backup.securityLogs) {
-                                    securityLogs = backup.securityLogs;
                                 }
                                 
                                 saveFiles();
                                 renderFiles();
                                 updateStorageInfo();
-                                showStatus('Secure data restored successfully', 'success');
-                                logSecurityEvent('INFO', 'Data restored from secure backup');
+                                showStatus('Data restored successfully', 'success');
                             }
                         } else {
                             showStatus('Invalid backup file format', 'error');
@@ -2628,13 +1807,43 @@
                     } catch (error) {
                         showStatus('Error reading backup file', 'error');
                         console.error(error);
-                        logSecurityEvent('ERROR', 'Backup restore failed');
                     }
                 };
                 reader.readAsText(file);
             };
             
             input.click();
+        }
+
+        // Utility functions for storage
+        function saveToStorage(key, value) {
+            try {
+                localStorage.setItem(key, value);
+            } catch (error) {
+                console.warn(`Could not save ${key} to localStorage:`, error);
+                // Store in memory as fallback
+                window[`_cloudvault_${key}`] = value;
+            }
+        }
+
+        function getFromStorage(key) {
+            try {
+                return localStorage.getItem(key) || window[`_cloudvault_${key}`] || null;
+            } catch (error) {
+                console.warn(`Could not get ${key} from localStorage:`, error);
+                return window[`_cloudvault_${key}`] || null;
+            }
+        }
+
+        function saveFiles() {
+            try {
+                localStorage.setItem('cloudvault_files', JSON.stringify(files));
+            } catch (error) {
+                console.warn('Could not save files to localStorage:', error);
+                // Keep files in memory
+                window._cloudvault_files = files;
+                showStatus('Warning: Changes saved in memory only', 'warning');
+            }
         }
 
         function updateStorageInfo() {
@@ -2681,8 +1890,6 @@
                 indicator.style.background = 'var(--error)';
             } else if (type === 'warning') {
                 indicator.style.background = 'var(--warning)';
-            } else if (type === 'security') {
-                indicator.style.background = 'var(--security)';
             } else {
                 indicator.style.background = 'var(--success)';
             }
@@ -2698,39 +1905,27 @@
             document.body.setAttribute('data-theme', savedTheme);
             document.getElementById('themeToggle').textContent = savedTheme === 'light' ? '??' : '??';
             
-            // Load auto-lock time
-            const savedAutoLock = getFromStorage('cloudvault_autolock');
-            if (savedAutoLock) {
-                window.autoLockTime = parseInt(savedAutoLock);
-            }
-            
             // Check auto dark mode
             checkAutoTheme();
         }
 
-        function openFullscreen(src, type) {
-            const fullscreenDiv = document.createElement('div');
-            fullscreenDiv.style.cssText = `
-                position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
-                background: rgba(0,0,0,0.9); z-index: 2000; display: flex; 
-                align-items: center; justify-content: center; cursor: pointer;
-            `;
-            
-            let content;
-            if (type === 'image') {
-                content = `<img src="${src}" style="max-width: 95%; max-height: 95%; object-fit: contain; border-radius: 0.5rem;">`;
-            } else if (type === 'video') {
-                content = `<video src="${src}" controls autoplay style="max-width: 95%; max-height: 95%; border-radius: 0.5rem;">`;
-            }
-            
-            fullscreenDiv.innerHTML = content + '<div style="position: absolute; top: 20px; right: 30px; color: white; font-size: 2rem; cursor: pointer; user-select: none;">?</div>';
-            
-            fullscreenDiv.onclick = (e) => {
-                if (e.target === fullscreenDiv || e.target.textContent === '?') {
-                    document.body.removeChild(fullscreenDiv);
-                }
+        // Helper functions for code files
+        function isCodeFile(file) {
+            const codeExtensions = ['.js', '.html', '.htm', '.css', '.py', '.java', '.cpp', '.c', '.php', '.rb', '.go', '.rs', '.ts', '.jsx', '.tsx', '.vue', '.svelte', '.xml', '.sql', '.sh', '.bat', '.ps1', '.yaml', '.yml', '.json', '.md'];
+            return codeExtensions.some(ext => file.name.toLowerCase().endsWith(ext));
+        }
+
+        function getCodeLanguage(filename) {
+            const ext = filename.toLowerCase().split('.').pop();
+            const languageMap = {
+                'js': 'javascript', 'jsx': 'javascript', 'ts': 'typescript', 'tsx': 'typescript',
+                'py': 'python', 'java': 'java', 'cpp': 'cpp', 'c': 'c', 'php': 'php',
+                'rb': 'ruby', 'go': 'go', 'rs': 'rust', 'html': 'html', 'htm': 'html',
+                'css': 'css', 'xml': 'xml', 'sql': 'sql', 'sh': 'bash', 'bat': 'batch',
+                'ps1': 'powershell', 'yaml': 'yaml', 'yml': 'yaml', 'json': 'json',
+                'md': 'markdown', 'vue': 'vue', 'svelte': 'svelte'
             };
-            document.body.appendChild(fullscreenDiv);
+            return languageMap[ext] || 'text';
         }
 
         function escapeHtml(text) {
@@ -2782,31 +1977,21 @@
             document.body.removeChild(textArea);
         }
 
-        // Enhanced keyboard shortcuts with security
+        // Keyboard shortcuts
         document.addEventListener('keydown', function(e) {
-            // Disable F12, Ctrl+Shift+I, Ctrl+U, etc.
-            if (e.key === 'F12' || 
-                (e.ctrlKey && e.shiftKey && e.key === 'I') ||
-                (e.ctrlKey && e.shiftKey && e.key === 'C') ||
-                (e.ctrlKey && e.key === 'U' && !e.target.matches('#fileInput'))) {
-                e.preventDefault();
-                logSecurityEvent('WARNING', 'Developer tools access attempt blocked');
-                showSecurityAlert('??? Access denied for security reasons');
-                return false;
-            }
-            
-            // Regular shortcuts
-            if (e.ctrlKey && e.key === 'u' && e.target.matches('body')) {
+            // Ctrl+U for upload
+            if (e.ctrlKey && e.key === 'u') {
                 e.preventDefault();
                 document.getElementById('fileInput').click();
             }
             
+            // Escape to close modals
             if (e.key === 'Escape') {
                 closeModal();
                 closeSettings();
-                closeSecurityCenter();
             }
             
+            // Ctrl+A to select all files
             if (e.ctrlKey && e.key === 'a' && !e.target.matches('input, textarea')) {
                 e.preventDefault();
                 const visibleFiles = files.filter(f => 
@@ -2817,50 +2002,17 @@
                 renderFiles();
             }
             
+            // Delete key to delete selected files
             if (e.key === 'Delete' && selectedFiles.size > 0) {
                 bulkDelete();
             }
         });
 
-        // Security monitoring - prevent context menu
-        document.addEventListener('contextmenu', function(e) {
-            e.preventDefault();
-            logSecurityEvent('INFO', 'Context menu blocked');
-            return false;
-        });
-
-        // Disable text selection on sensitive elements
-        document.addEventListener('selectstart', function(e) {
-            if (e.target.closest('.security-shield, .security-badge, .security-status')) {
-                e.preventDefault();
-                return false;
-            }
-        });
-
-        // Monitor for suspicious behavior
-        let keylogCount = 0;
-        document.addEventListener('keydown', function(e) {
-            keylogCount++;
-            if (keylogCount > 1000) { // Potential keylogger
-                logSecurityEvent('THREAT', 'Potential keylogger detected - high key activity');
-                showSecurityAlert('??? Suspicious activity detected!');
-                keylogCount = 0;
-            }
-        });
-
-        // Auto-save functionality with encryption
+        // Auto-save functionality
         setInterval(saveFiles, 30000); // Auto-save every 30 seconds
 
         // Check for auto theme every hour
         setInterval(checkAutoTheme, 3600000);
-
-        // Security log rotation
-        setInterval(() => {
-            if (securityLogs.length > 1000) {
-                securityLogs = securityLogs.slice(-500); // Keep last 500 logs
-                logSecurityEvent('INFO', 'Security logs rotated');
-            }
-        }, 3600000); // Every hour
 
         // Mobile responsive sidebar toggle
         function toggleSidebar() {
@@ -2879,17 +2031,20 @@
             headerLeft.insertBefore(menuBtn, headerLeft.firstChild);
         }
 
-        // Initialize breadcrumb
+        // Context menu prevention on file cards
+        document.addEventListener('contextmenu', function(e) {
+            if (e.target.closest('.file-card')) {
+                e.preventDefault();
+                const fileCard = e.target.closest('.file-card');
+                const fileId = parseInt(fileCard.dataset.fileId);
+                if (fileId) {
+                    toggleFileSelection(fileId);
+                }
+            }
+        });
+
+        // Initialize the app
         updateBreadcrumb();
-
-        // Final security initialization
-        logSecurityEvent('INFO', 'Z+ Security system fully operational');
-        showStatus('??? CloudVault Pro Z+ Security Ready', 'security');
-
-        // Console warning
-        console.warn('%cSTOP!', 'color: red; font-size: 50px; font-weight: bold;');
-        console.warn('%cThis is a browser feature intended for developers. Do not enter or paste anything here that you do not understand. This could give attackers access to your CloudVault Pro account.', 'color: red; font-size: 16px;');
-        
     </script>
 </body>
 </html>
