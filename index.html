@@ -584,7 +584,7 @@
     <!-- Login Screen -->
     <div class="login-screen" id="loginScreen">
         <div class="login-card">
-            <div class="logo">☁️ CloudVault Pro</div>
+            <div class="logo">?? CloudVault Pro</div>
             <p style="margin-bottom: 2rem; color: var(--text-secondary);">
                 Secure cloud storage for all your files
             </p>
@@ -602,10 +602,10 @@
     <div class="main-app hidden" id="mainApp">
         <header class="header">
             <div class="header-left">
-                <div class="logo">☁️ CloudVault Pro</div>
+                <div class="logo">?? CloudVault Pro</div>
                 <div class="search-bar">
                     <input type="text" placeholder="Search files..." id="searchInput">
-                    <span class="search-icon">🔍</span>
+                    <span class="search-icon">??</span>
                 </div>
             </div>
             <div class="header-right">
@@ -613,10 +613,10 @@
                     <strong>Storage:</strong> <span id="usedStorage">0 MB</span> / <span id="maxStorage">1000 GB</span> (<span id="totalStorage">1 TB</span>)
                 </div>
                 <button class="theme-toggle" id="themeToggle" title="Toggle theme">
-                    🌙
+                    ??
                 </button>
                 <button class="theme-toggle" onclick="openSettings()" title="Settings">
-                    ⚙️
+                    ??
                 </button>
                 <button class="btn" onclick="logout()">Logout</button>
             </div>
@@ -625,63 +625,63 @@
         <div class="main-content">
             <aside class="sidebar" id="sidebar">
                 <div class="sidebar-item active" data-section="all">
-                    📁 All Files
+                    ?? All Files
                 </div>
                 <div class="sidebar-item" data-section="images">
-                    🖼️ Images
+                    ??? Images
                 </div>
                 <div class="sidebar-item" data-section="documents">
-                    📄 Documents
+                    ?? Documents
                 </div>
                 <div class="sidebar-item" data-section="videos">
-                    🎥 Videos
+                    ?? Videos
                 </div>
                 <div class="sidebar-item" data-section="recent">
-                    ⏱️ Recent
+                    ?? Recent
                 </div>
                 <div class="sidebar-item" data-section="favorites">
-                    ⭐ Favorites
+                    ? Favorites
                 </div>
                 <div class="sidebar-item" data-section="trash">
-                    🗑️ Trash
+                    ??? Trash
                 </div>
             </aside>
 
             <main class="content-area">
                 <!-- Breadcrumb -->
                 <div class="breadcrumb" id="breadcrumb">
-                    <span class="breadcrumb-item" onclick="navigateToFolder(null)">📁 Home</span>
+                    <span class="breadcrumb-item" onclick="navigateToFolder(null)">?? Home</span>
                 </div>
 
                 <!-- Bulk Actions -->
                 <div class="bulk-actions hidden" id="bulkActions">
                     <span id="selectionCount">0 files selected</span>
-                    <button class="btn" onclick="bulkDownload()">💾 Download</button>
-                    <button class="btn" onclick="bulkDelete()">🗑️ Delete</button>
-                    <button class="btn" onclick="bulkMove()">📁 Move</button>
+                    <button class="btn" onclick="bulkDownload()">?? Download</button>
+                    <button class="btn" onclick="bulkDelete()">??? Delete</button>
+                    <button class="btn" onclick="bulkMove()">?? Move</button>
                     <button class="btn btn-secondary" onclick="clearSelection()">Clear</button>
                 </div>
 
                 <div class="toolbar">
                     <button class="btn" onclick="document.getElementById('fileInput').click()">
-                        📤 Upload Files
+                        ?? Upload Files
                     </button>
                     <button class="btn" onclick="createFolder()">
-                        📁 New Folder
+                        ?? New Folder
                     </button>
                     <button class="btn" onclick="toggleView()">
-                        ⊞ Grid View
+                        ? Grid View
                     </button>
                     <button class="btn btn-secondary" onclick="backupData()">
-                        💾 Backup
+                        ?? Backup
                     </button>
                     <button class="btn btn-secondary" onclick="restoreData()">
-                        📂 Restore
+                        ?? Restore
                     </button>
                 </div>
 
                 <div class="upload-area" id="uploadArea" onclick="document.getElementById('fileInput').click()">
-                    <div style="font-size: 3rem; margin-bottom: 1rem;">☁️</div>
+                    <div style="font-size: 3rem; margin-bottom: 1rem;">??</div>
                     <h3>Drag & Drop files here or click to upload</h3>
                     <p style="color: var(--text-secondary); margin-top: 0.5rem;">
                         Support for all file types - Images, Documents, Videos, and more
@@ -720,7 +720,7 @@
     <!-- Settings Modal -->
     <div class="modal" id="settingsModal">
         <div class="modal-content">
-            <h3>⚙️ Settings</h3>
+            <h3>?? Settings</h3>
             <div class="settings-section">
                 <h3>Security</h3>
                 <div class="setting-item">
@@ -811,19 +811,19 @@
 
         // File type icons
         const fileIcons = {
-            'image': '🖼️',
-            'video': '🎥',
-            'audio': '🎵',
-            'pdf': '📕',
-            'doc': '📄',
-            'txt': '📝',
-            'zip': '📦',
-            'folder': '📁',
-            'html': '🌐',
-            'css': '🎨',
-            'js': '⚡',
-            'json': '📊',
-            'default': '📄'
+            'image': '???',
+            'video': '??',
+            'audio': '??',
+            'pdf': '??',
+            'doc': '??',
+            'txt': '??',
+            'zip': '??',
+            'folder': '??',
+            'html': '??',
+            'css': '??',
+            'js': '?',
+            'json': '??',
+            'default': '??'
         };
 
         // Initialize app
@@ -908,7 +908,7 @@
             const newTheme = currentTheme === 'light' ? 'dark' : 'light';
             
             body.setAttribute('data-theme', newTheme);
-            document.getElementById('themeToggle').textContent = newTheme === 'light' ? '🌙' : '☀️';
+            document.getElementById('themeToggle').textContent = newTheme === 'light' ? '??' : '??';
             
             saveToStorage('theme', newTheme);
             showStatus(`Switched to ${newTheme} mode`, 'success');
@@ -1069,7 +1069,7 @@
             if (filteredFiles.length === 0) {
                 grid.innerHTML = `
                     <div style="grid-column: 1 / -1; text-align: center; padding: 3rem; color: var(--text-secondary);">
-                        <div style="font-size: 3rem; margin-bottom: 1rem;">📂</div>
+                        <div style="font-size: 3rem; margin-bottom: 1rem;">??</div>
                         <h3>No files found</h3>
                         <p>Upload some files to get started!</p>
                     </div>
@@ -1099,15 +1099,15 @@
                 card.innerHTML = `
                     <div class="file-actions">
                         <button class="action-btn" onclick="event.stopPropagation(); toggleFavorite(${file.id})" title="Toggle favorite">
-                            ${file.isFavorite ? '⭐' : '☆'}
+                            ${file.isFavorite ? '?' : '?'}
                         </button>
                         ${!file.isFolder ? `
                         <button class="action-btn" onclick="event.stopPropagation(); downloadFile(${file.id})" title="Download">
-                            💾
+                            ??
                         </button>
                         ` : ''}
                         <button class="action-btn" onclick="event.stopPropagation(); deleteFile(${file.id})" title="Delete">
-                            🗑️
+                            ???
                         </button>
                     </div>
                     <div class="file-icon ${file.isFolder ? 'folder-icon' : ''}">${getFileIcon(file)}</div>
@@ -1136,12 +1136,12 @@
 
         function updateBreadcrumb() {
             const breadcrumb = document.getElementById('breadcrumb');
-            let path = ['<span class="breadcrumb-item" onclick="navigateToFolder(null)">📁 Home</span>'];
+            let path = ['<span class="breadcrumb-item" onclick="navigateToFolder(null)">?? Home</span>'];
             
             if (currentFolder) {
                 const folder = files.find(f => f.id === currentFolder);
                 if (folder) {
-                    path.push('<span>›</span>');
+                    path.push('<span>�</span>');
                     path.push(`<span class="breadcrumb-item">${escapeHtml(folder.name)}</span>`);
                 }
             }
@@ -1172,8 +1172,8 @@
                     <div class="image-viewer">
                         <img src="${file.dataUrl}" alt="${escapeHtml(file.name)}" onclick="openFullscreen('${file.dataUrl}', 'image')">
                         <div style="margin-top: 1rem; display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
-                            <button class="btn" onclick="openFullscreen('${file.dataUrl}', 'image')">🔍 Fullscreen</button>
-                            <button class="btn" onclick="downloadFile(${file.id})">💾 Download</button>
+                            <button class="btn" onclick="openFullscreen('${file.dataUrl}', 'image')">?? Fullscreen</button>
+                            <button class="btn" onclick="downloadFile(${file.id})">?? Download</button>
                         </div>
                     </div>
                 `;
@@ -1187,7 +1187,7 @@
                             Your browser does not support video playback.
                         </video>
                         <div style="margin-top: 1rem; display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
-                            <button class="btn" onclick="downloadFile(${file.id})">💾 Download</button>
+                            <button class="btn" onclick="downloadFile(${file.id})">?? Download</button>
                         </div>
                     </div>
                 `;
@@ -1196,12 +1196,12 @@
                 // Audio player
                 contentHtml += `
                     <div style="text-align: center; padding: 2rem; background: var(--surface); border-radius: 0.5rem;">
-                        <div style="font-size: 3rem; margin-bottom: 1rem;">🎵</div>
+                        <div style="font-size: 3rem; margin-bottom: 1rem;">??</div>
                         <audio src="${file.dataUrl}" controls style="width: 100%;" preload="metadata">
                             Your browser does not support audio playback.
                         </audio>
                         <div style="margin-top: 1rem;">
-                            <button class="btn" onclick="downloadFile(${file.id})">💾 Download</button>
+                            <button class="btn" onclick="downloadFile(${file.id})">?? Download</button>
                         </div>
                     </div>
                 `;
@@ -1215,8 +1215,8 @@
                             Your browser does not support PDF viewing.
                         </iframe>
                         <div style="margin-top: 1rem;">
-                            <button class="btn" onclick="openInNewTab('${file.dataUrl}')">🚀 Open in New Tab</button>
-                            <button class="btn" onclick="downloadFile(${file.id})">💾 Download</button>
+                            <button class="btn" onclick="openInNewTab('${file.dataUrl}')">?? Open in New Tab</button>
+                            <button class="btn" onclick="downloadFile(${file.id})">?? Download</button>
                         </div>
                     </div>
                 `;
@@ -1229,10 +1229,10 @@
                 contentHtml += `
                     <div>
                         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; flex-wrap: wrap; gap: 1rem;">
-                            <span style="font-weight: 500;">📄 ${language.toUpperCase()} Code</span>
+                            <span style="font-weight: 500;">?? ${language.toUpperCase()} Code</span>
                             <div style="display: flex; gap: 1rem;">
-                                <button class="btn btn-secondary" onclick="copyToClipboard('${escapeForJs(codeContent)}')">📋 Copy</button>
-                                <button class="btn" onclick="editCodeFile('${file.id}')">✏️ Edit</button>
+                                <button class="btn btn-secondary" onclick="copyToClipboard('${escapeForJs(codeContent)}')">?? Copy</button>
+                                <button class="btn" onclick="editCodeFile('${file.id}')">?? Edit</button>
                             </div>
                         </div>
                         <pre style="background: var(--background); padding: 1rem; border-radius: 0.5rem; overflow: auto; max-height: 500px; white-space: pre-wrap; font-family: 'Courier New', monospace; font-size: 0.875rem; line-height: 1.4; border: 1px solid var(--border);"><code>${escapeHtml(codeContent)}</code></pre>
@@ -1245,10 +1245,10 @@
                 contentHtml += `
                     <div>
                         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; flex-wrap: wrap; gap: 1rem;">
-                            <span style="font-weight: 500;">📝 Text Content</span>
+                            <span style="font-weight: 500;">?? Text Content</span>
                             <div style="display: flex; gap: 1rem;">
-                                <button class="btn btn-secondary" onclick="copyToClipboard('${escapeForJs(textContent)}')">📋 Copy</button>
-                                <button class="btn" onclick="editTextFile('${file.id}')">✏️ Edit</button>
+                                <button class="btn btn-secondary" onclick="copyToClipboard('${escapeForJs(textContent)}')">?? Copy</button>
+                                <button class="btn" onclick="editTextFile('${file.id}')">?? Edit</button>
                             </div>
                         </div>
                         <pre style="background: var(--surface); padding: 1rem; border-radius: 0.5rem; overflow: auto; max-height: 400px; white-space: pre-wrap; font-family: 'Courier New', monospace; font-size: 0.875rem; line-height: 1.4; border: 1px solid var(--border);">${escapeHtml(textContent)}</pre>
@@ -1263,7 +1263,7 @@
                         <p>File preview not available</p>
                         <p style="color: var(--text-secondary); margin-top: 0.5rem;">This file type cannot be previewed in the browser</p>
                         <div style="margin-top: 1rem;">
-                            <button class="btn" onclick="downloadFile(${file.id})">💾 Download File</button>
+                            <button class="btn" onclick="downloadFile(${file.id})">?? Download File</button>
                         </div>
                     </div>
                 `;
@@ -1340,7 +1340,7 @@
                     <textarea class="code-editor" id="codeEditor" placeholder="Enter code...">${escapeHtml(codeContent)}</textarea>
                     <div style="margin-top: 1rem; display: flex; gap: 1rem; justify-content: flex-end;">
                         <button class="btn btn-secondary" onclick="openFile(files.find(f => f.id === ${fileId}))">Cancel</button>
-                        <button class="btn" onclick="saveCodeFile('${fileId}')">💾 Save</button>
+                        <button class="btn" onclick="saveCodeFile('${fileId}')">?? Save</button>
                     </div>
                 </div>
             `;
@@ -1378,7 +1378,7 @@
                     <textarea class="code-editor" id="textEditor" placeholder="Enter text...">${escapeHtml(textContent)}</textarea>
                     <div style="margin-top: 1rem; display: flex; gap: 1rem; justify-content: flex-end;">
                         <button class="btn btn-secondary" onclick="openFile(files.find(f => f.id === ${fileId}))">Cancel</button>
-                        <button class="btn" onclick="saveTextFile('${fileId}')">💾 Save</button>
+                        <button class="btn" onclick="saveTextFile('${fileId}')">?? Save</button>
                     </div>
                 </div>
             `;
@@ -1417,10 +1417,10 @@
                 content = `<video src="${src}" controls autoplay style="max-width: 95%; max-height: 95%; border-radius: 0.5rem;">`;
             }
             
-            fullscreenDiv.innerHTML = content + '<div style="position: absolute; top: 20px; right: 30px; color: white; font-size: 2rem; cursor: pointer; user-select: none;">✕</div>';
+            fullscreenDiv.innerHTML = content + '<div style="position: absolute; top: 20px; right: 30px; color: white; font-size: 2rem; cursor: pointer; user-select: none;">?</div>';
             
             fullscreenDiv.onclick = (e) => {
-                if (e.target === fullscreenDiv || e.target.textContent === '✕') {
+                if (e.target === fullscreenDiv || e.target.textContent === '?') {
                     document.body.removeChild(fullscreenDiv);
                 }
             };
@@ -1473,7 +1473,7 @@
             if (results.length === 0) {
                 grid.innerHTML = `
                     <div style="grid-column: 1 / -1; text-align: center; padding: 3rem; color: var(--text-secondary);">
-                        <div style="font-size: 3rem; margin-bottom: 1rem;">🔍</div>
+                        <div style="font-size: 3rem; margin-bottom: 1rem;">??</div>
                         <h3>No files found for "${escapeHtml(query)}"</h3>
                         <p>Try adjusting your search terms</p>
                     </div>
@@ -1495,15 +1495,15 @@
                 card.innerHTML = `
                     <div class="file-actions">
                         <button class="action-btn" onclick="event.stopPropagation(); toggleFavorite(${file.id})" title="Toggle favorite">
-                            ${file.isFavorite ? '⭐' : '☆'}
+                            ${file.isFavorite ? '?' : '?'}
                         </button>
                         ${!file.isFolder ? `
                         <button class="action-btn" onclick="event.stopPropagation(); downloadFile(${file.id})" title="Download">
-                            💾
+                            ??
                         </button>
                         ` : ''}
                         <button class="action-btn" onclick="event.stopPropagation(); deleteFile(${file.id})" title="Delete">
-                            🗑️
+                            ???
                         </button>
                     </div>
                     <div class="file-icon ${file.isFolder ? 'folder-icon' : ''}">${getFileIcon(file)}</div>
@@ -1704,11 +1704,11 @@
                 
                 if (shouldBeDark && currentTheme === 'light') {
                     document.body.setAttribute('data-theme', 'dark');
-                    document.getElementById('themeToggle').textContent = '☀️';
+                    document.getElementById('themeToggle').textContent = '??';
                     saveToStorage('theme', 'dark');
                 } else if (!shouldBeDark && currentTheme === 'dark') {
                     document.body.setAttribute('data-theme', 'light');
-                    document.getElementById('themeToggle').textContent = '🌙';
+                    document.getElementById('themeToggle').textContent = '??';
                     saveToStorage('theme', 'light');
                 }
             }
@@ -1722,11 +1722,11 @@
             if (grid.style.display === 'flex') {
                 grid.style.display = 'grid';
                 grid.style.flexDirection = '';
-                btn.textContent = '⊞ Grid View';
+                btn.textContent = '? Grid View';
             } else {
                 grid.style.display = 'flex';
                 grid.style.flexDirection = 'column';
-                btn.textContent = '☰ List View';
+                btn.textContent = '? List View';
             }
         }
 
@@ -1781,7 +1781,7 @@
                                         saveToStorage('theme', backup.settings.theme);
                                         document.body.setAttribute('data-theme', backup.settings.theme);
                                         document.getElementById('themeToggle').textContent = 
-                                            backup.settings.theme === 'light' ? '🌙' : '☀️';
+                                            backup.settings.theme === 'light' ? '??' : '??';
                                     }
                                     if (backup.settings.autoDarkMode) {
                                         saveToStorage('autoDarkMode', backup.settings.autoDarkMode);
@@ -1903,7 +1903,7 @@
             // Load saved theme
             const savedTheme = getFromStorage('theme') || 'light';
             document.body.setAttribute('data-theme', savedTheme);
-            document.getElementById('themeToggle').textContent = savedTheme === 'light' ? '🌙' : '☀️';
+            document.getElementById('themeToggle').textContent = savedTheme === 'light' ? '??' : '??';
             
             // Check auto dark mode
             checkAutoTheme();
@@ -2024,7 +2024,7 @@
         if (window.innerWidth <= 640) {
             const headerLeft = document.querySelector('.header-left');
             const menuBtn = document.createElement('button');
-            menuBtn.innerHTML = '☰';
+            menuBtn.innerHTML = '?';
             menuBtn.className = 'theme-toggle';
             menuBtn.onclick = toggleSidebar;
             menuBtn.title = 'Toggle menu';
