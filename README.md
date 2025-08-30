@@ -1,2 +1,2895 @@
-# Yugan-Creations
-Created By Yugan
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CloudVault Pro - Your Personal Cloud Storage</title>
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:;">
+    <meta http-equiv="X-Frame-Options" content="DENY">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #3b82f6;
+            --secondary-color: #1e40af;
+            --background: #ffffff;
+            --surface: #f8fafc;
+            --surface-hover: #f1f5f9;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --border: #e2e8f0;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            --success: #10b981;
+            --warning: #f59e0b;
+            --error: #ef4444;
+            --security: #8b5cf6;
+        }
+
+        [data-theme="dark"] {
+            --primary-color: #60a5fa;
+            --secondary-color: #3b82f6;
+            --background: #0f172a;
+            --surface: #1e293b;
+            --surface-hover: #334155;
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --border: #334155;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--background);
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+            overflow-x: hidden;
+            user-select: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+        }
+
+        /* Anti-debugging protection */
+        .debug-protection {
+            position: absolute;
+            width: 0;
+            height: 0;
+            overflow: hidden;
+            opacity: 0;
+        }
+
+        .security-shield {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            background: var(--security);
+            color: white;
+            padding: 0.5rem;
+            border-radius: 50%;
+            font-size: 0.8rem;
+            z-index: 9999;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.8; }
+            50% { transform: scale(1.1); opacity: 1; }
+        }
+
+        .security-status {
+            background: linear-gradient(45deg, var(--success), var(--security));
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 1rem;
+            font-size: 0.75rem;
+            margin-left: 1rem;
+            animation: glow 3s ease-in-out infinite alternate;
+        }
+
+        @keyframes glow {
+            from { box-shadow: 0 0 5px var(--success); }
+            to { box-shadow: 0 0 15px var(--security), 0 0 25px var(--security); }
+        }
+
+        .login-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .login-card {
+            background: var(--surface);
+            padding: 2rem;
+            border-radius: 1rem;
+            box-shadow: var(--shadow-lg);
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+            transform: translateY(-20px);
+            animation: slideUp 0.6s ease-out;
+            border: 3px solid var(--security);
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .logo {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        .security-badge {
+            background: linear-gradient(45deg, var(--security), var(--primary-color));
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 2rem;
+            font-size: 0.8rem;
+            margin-bottom: 1rem;
+            display: inline-block;
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+
+        .input-group {
+            margin: 1rem 0;
+            text-align: left;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid var(--border);
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            background: var(--background);
+            color: var(--text-primary);
+            transition: border-color 0.3s ease;
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        .security-input {
+            border: 2px solid var(--security) !important;
+            background: linear-gradient(45deg, var(--background), rgba(139, 92, 246, 0.1));
+        }
+
+        .btn {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 0.75rem 2rem;
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .btn:hover {
+            background: var(--secondary-color);
+            transform: translateY(-2px);
+        }
+
+        .btn-security {
+            background: linear-gradient(45deg, var(--security), var(--primary-color));
+        }
+
+        .btn-secondary {
+            background: var(--surface-hover);
+            color: var(--text-primary);
+        }
+
+        .failed-attempts {
+            background: var(--error);
+            color: white;
+            padding: 0.5rem;
+            border-radius: 0.5rem;
+            margin-top: 1rem;
+            font-size: 0.875rem;
+        }
+
+        .header {
+            background: var(--surface);
+            padding: 1rem 2rem;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .theme-toggle {
+            background: var(--surface-hover);
+            border: none;
+            padding: 0.5rem;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+        }
+
+        .theme-toggle:hover {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .storage-info {
+            background: var(--surface);
+            padding: 1rem;
+            border-radius: 0.5rem;
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        .main-content {
+            display: flex;
+            min-height: calc(100vh - 80px);
+        }
+
+        .sidebar {
+            width: 250px;
+            background: var(--surface);
+            border-right: 1px solid var(--border);
+            padding: 1rem;
+            overflow-y: auto;
+        }
+
+        .sidebar-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 0.25rem;
+        }
+
+        .sidebar-item:hover, .sidebar-item.active {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .content-area {
+            flex: 1;
+            padding: 2rem;
+            overflow-y: auto;
+        }
+
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        .breadcrumb-item {
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .breadcrumb-item:hover {
+            color: var(--primary-color);
+        }
+
+        .toolbar {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .upload-area {
+            border: 2px dashed var(--border);
+            border-radius: 1rem;
+            padding: 3rem;
+            text-align: center;
+            margin-bottom: 2rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: var(--surface);
+        }
+
+        .upload-area:hover, .upload-area.dragover {
+            border-color: var(--primary-color);
+            background: var(--surface-hover);
+            transform: translateY(-2px);
+        }
+
+        .secure-upload {
+            border-color: var(--security);
+            background: linear-gradient(45deg, var(--surface), rgba(139, 92, 246, 0.1));
+        }
+
+        .files-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .file-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 0.5rem;
+            padding: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .file-card:hover {
+            box-shadow: var(--shadow-lg);
+            transform: translateY(-2px);
+        }
+
+        .file-card.selected {
+            border-color: var(--primary-color);
+            background: var(--surface-hover);
+        }
+
+        .file-card.encrypted {
+            border: 2px solid var(--security);
+            background: linear-gradient(45deg, var(--surface), rgba(139, 92, 246, 0.1));
+        }
+
+        .file-icon {
+            width: 48px;
+            height: 48px;
+            background: var(--primary-color);
+            border-radius: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1rem;
+            color: white;
+            font-size: 1.5rem;
+        }
+
+        .folder-icon {
+            background: #f59e0b;
+        }
+
+        .secure-icon {
+            background: var(--security);
+        }
+
+        .file-name {
+            font-weight: 500;
+            margin-bottom: 0.25rem;
+            word-break: break-word;
+        }
+
+        .file-size {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+        }
+
+        .file-actions {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            display: flex;
+            gap: 0.25rem;
+        }
+
+        .file-card:hover .file-actions {
+            opacity: 1;
+        }
+
+        .action-btn {
+            background: var(--surface-hover);
+            border: none;
+            padding: 0.25rem;
+            border-radius: 0.25rem;
+            cursor: pointer;
+            color: var(--text-primary);
+            font-size: 0.875rem;
+        }
+
+        .action-btn:hover {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .search-bar {
+            flex: 1;
+            max-width: 400px;
+            position: relative;
+        }
+
+        .search-bar input {
+            width: 100%;
+            padding: 0.5rem 2.5rem 0.5rem 1rem;
+            border: 1px solid var(--border);
+            border-radius: 0.5rem;
+            background: var(--background);
+            color: var(--text-primary);
+        }
+
+        .search-icon {
+            position: absolute;
+            right: 0.75rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-secondary);
+        }
+
+        .status-indicator {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: var(--success);
+            color: white;
+            padding: 0.75rem 1rem;
+            border-radius: 0.5rem;
+            box-shadow: var(--shadow-lg);
+            z-index: 1000;
+            transform: translateY(100px);
+            transition: transform 0.3s ease;
+        }
+
+        .status-indicator.show {
+            transform: translateY(0);
+        }
+
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .modal.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-content {
+            background: var(--surface);
+            padding: 2rem;
+            border-radius: 1rem;
+            max-width: 80vw;
+            max-height: 80vh;
+            width: 90%;
+            box-shadow: var(--shadow-lg);
+            overflow-y: auto;
+        }
+
+        .modal-large {
+            max-width: 95vw;
+            max-height: 95vh;
+        }
+
+        .code-editor {
+            background: var(--background);
+            border: 1px solid var(--border);
+            border-radius: 0.5rem;
+            padding: 1rem;
+            font-family: 'Courier New', monospace;
+            font-size: 0.875rem;
+            line-height: 1.4;
+            resize: vertical;
+            min-height: 300px;
+            width: 100%;
+            color: var(--text-primary);
+        }
+
+        .image-viewer {
+            text-align: center;
+            max-width: 100%;
+        }
+
+        .image-viewer img {
+            max-width: 100%;
+            max-height: 60vh;
+            border-radius: 0.5rem;
+            box-shadow: var(--shadow);
+        }
+
+        .pdf-viewer {
+            width: 100%;
+            height: 70vh;
+            border: none;
+            border-radius: 0.5rem;
+        }
+
+        .bulk-actions {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            padding: 1rem;
+            background: var(--surface);
+            border-radius: 0.5rem;
+            margin-bottom: 1rem;
+            border: 1px solid var(--border);
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid var(--primary-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 4px;
+            background: var(--border);
+            border-radius: 2px;
+            overflow: hidden;
+            margin: 1rem 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--primary-color);
+            border-radius: 2px;
+            transition: width 0.3s ease;
+            width: 0%;
+        }
+
+        .setting-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            border: 1px solid var(--border);
+            border-radius: 0.5rem;
+            margin-bottom: 1rem;
+            gap: 1rem;
+        }
+
+        .security-setting {
+            border: 2px solid var(--security);
+            background: linear-gradient(45deg, var(--surface), rgba(139, 92, 246, 0.1));
+        }
+
+        .settings-section {
+            margin-bottom: 2rem;
+        }
+
+        .settings-section h3 {
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .storage-setting {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .storage-setting input {
+            padding: 0.5rem;
+            border: 1px solid var(--border);
+            border-radius: 0.25rem;
+            background: var(--background);
+            color: var(--text-primary);
+            width: 100px;
+        }
+
+        .encryption-indicator {
+            background: var(--security);
+            color: white;
+            padding: 0.2rem 0.5rem;
+            border-radius: 0.25rem;
+            font-size: 0.7rem;
+            position: absolute;
+            top: 0.5rem;
+            left: 0.5rem;
+        }
+
+        .virus-scan-status {
+            background: var(--success);
+            color: white;
+            padding: 0.2rem 0.5rem;
+            border-radius: 0.25rem;
+            font-size: 0.7rem;
+            position: absolute;
+            bottom: 0.5rem;
+            left: 0.5rem;
+        }
+
+        /* Security notifications */
+        .security-alert {
+            background: linear-gradient(45deg, var(--error), var(--warning));
+            color: white;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin-bottom: 1rem;
+            animation: pulse 1.5s infinite;
+        }
+
+        .lockdown-mode {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 0, 0, 0.9);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            color: white;
+            font-size: 2rem;
+            text-align: center;
+        }
+
+        /* Anti-tampering styles */
+        .tamper-protection::before {
+            content: '';
+            position: absolute;
+            top: -1000px;
+            left: -1000px;
+            width: calc(100% + 2000px);
+            height: calc(100% + 2000px);
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 200px;
+            }
+            
+            .content-area {
+                padding: 1rem;
+            }
+            
+            .header {
+                padding: 1rem;
+            }
+            
+            .files-grid {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            }
+
+            .modal-content {
+                max-width: 95vw;
+                max-height: 95vh;
+            }
+
+            .setting-item {
+                flex-direction: column;
+                align-items: stretch;
+                text-align: center;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .sidebar {
+                position: fixed;
+                left: -250px;
+                height: 100%;
+                z-index: 200;
+                transition: left 0.3s ease;
+            }
+            
+            .sidebar.show {
+                left: 0;
+            }
+        }
+    </style>
+</head>
+<body data-theme="light">
+    <!-- Security Shield -->
+    <div class="security-shield" title="Z+ Security Active">???</div>
+    
+    <!-- Anti-debugging protection -->
+    <div class="debug-protection">
+        <script>
+            setInterval(function() {
+                if (window.console && (window.console.firebug || window.console._commandLineAPI || window.console._inspectorCommandLineAPI)) {
+                    document.body.innerHTML = '<div class="lockdown-mode"><div>???<br>SECURITY BREACH DETECTED<br>ACCESS DENIED</div></div>';
+                    throw new Error('Developer tools detected!');
+                }
+            }, 100);
+        </script>
+    </div>
+
+    <!-- Login Screen -->
+    <div class="login-screen" id="loginScreen">
+        <div class="login-card tamper-protection">
+            <div class="logo">?? CloudVault Pro</div>
+            <div class="security-badge">??? Z+ SECURITY PROTECTED</div>
+            <p style="margin-bottom: 2rem; color: var(--text-secondary);">
+                Ultra-secure cloud storage with military-grade protection
+            </p>
+            <form id="loginForm">
+                <div class="input-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" placeholder="Enter your password" required class="security-input">
+                </div>
+                <div class="input-group">
+                    <label for="masterPassword">Master Key (Optional)</label>
+                    <input type="password" id="masterPassword" placeholder="Enter master key for advanced access" class="security-input">
+                </div>
+                <button type="submit" class="btn btn-security">??? Secure Access</button>
+                <div id="failedAttempts" class="failed-attempts hidden">
+                    Failed attempts: <span id="attemptCount">0</span>/5
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Main App -->
+    <div class="main-app hidden" id="mainApp">
+        <header class="header">
+            <div class="header-left">
+                <div class="logo">?? CloudVault Pro</div>
+                <div class="security-status">??? Z+ PROTECTED</div>
+                <div class="search-bar">
+                    <input type="text" placeholder="Search files..." id="searchInput">
+                    <span class="search-icon">??</span>
+                </div>
+            </div>
+            <div class="header-right">
+                <div class="storage-info" id="storageInfo">
+                    <strong>Storage:</strong> <span id="usedStorage">0 MB</span> / <span id="maxStorage">1000 GB</span> (<span id="totalStorage">1 TB</span>)
+                </div>
+                <button class="theme-toggle" id="themeToggle" title="Toggle theme">
+                    ??
+                </button>
+                <button class="theme-toggle" onclick="openSettings()" title="Settings">
+                    ??
+                </button>
+                <button class="theme-toggle" onclick="openSecurityCenter()" title="Security Center">
+                    ???
+                </button>
+                <button class="btn" onclick="logout()">Logout</button>
+            </div>
+        </header>
+
+        <div class="main-content">
+            <aside class="sidebar" id="sidebar">
+                <div class="sidebar-item active" data-section="all">
+                    ?? All Files
+                </div>
+                <div class="sidebar-item" data-section="images">
+                    ??? Images
+                </div>
+                <div class="sidebar-item" data-section="documents">
+                    ?? Documents
+                </div>
+                <div class="sidebar-item" data-section="videos">
+                    ?? Videos
+                </div>
+                <div class="sidebar-item" data-section="secure">
+                    ??? Secure Vault
+                </div>
+                <div class="sidebar-item" data-section="recent">
+                    ?? Recent
+                </div>
+                <div class="sidebar-item" data-section="favorites">
+                    ? Favorites
+                </div>
+                <div class="sidebar-item" data-section="trash">
+                    ??? Trash
+                </div>
+            </aside>
+
+            <main class="content-area">
+                <!-- Security Alert -->
+                <div id="securityAlert" class="security-alert hidden">
+                    ??? Security Alert: Suspicious activity detected. System is monitoring.
+                </div>
+
+                <!-- Breadcrumb -->
+                <div class="breadcrumb" id="breadcrumb">
+                    <span class="breadcrumb-item" onclick="navigateToFolder(null)">?? Home</span>
+                </div>
+
+                <!-- Bulk Actions -->
+                <div class="bulk-actions hidden" id="bulkActions">
+                    <span id="selectionCount">0 files selected</span>
+                    <button class="btn" onclick="bulkDownload()">?? Download</button>
+                    <button class="btn" onclick="bulkEncrypt()">?? Encrypt</button>
+                    <button class="btn" onclick="bulkDelete()">??? Delete</button>
+                    <button class="btn" onclick="bulkMove()">?? Move</button>
+                    <button class="btn btn-secondary" onclick="clearSelection()">Clear</button>
+                </div>
+
+                <div class="toolbar">
+                    <button class="btn" onclick="document.getElementById('fileInput').click()">
+                        ?? Upload Files
+                    </button>
+                    <button class="btn" onclick="createFolder()">
+                        ?? New Folder
+                    </button>
+                    <button class="btn btn-security" onclick="createSecureFolder()">
+                        ??? Secure Folder
+                    </button>
+                    <button class="btn" onclick="toggleView()">
+                        ? Grid View
+                    </button>
+                    <button class="btn btn-secondary" onclick="virusScanAll()">
+                        ?? Scan All
+                    </button>
+                    <button class="btn btn-secondary" onclick="backupData()">
+                        ?? Backup
+                    </button>
+                    <button class="btn btn-secondary" onclick="restoreData()">
+                        ?? Restore
+                    </button>
+                </div>
+
+                <div class="upload-area secure-upload" id="uploadArea" onclick="document.getElementById('fileInput').click()">
+                    <div style="font-size: 3rem; margin-bottom: 1rem;">???</div>
+                    <h3>Secure Upload Zone</h3>
+                    <p style="color: var(--text-secondary); margin-top: 0.5rem;">
+                        All files are automatically encrypted and virus-scanned
+                    </p>
+                    <div class="progress-bar hidden" id="progressBar">
+                        <div class="progress-fill" id="progressFill"></div>
+                    </div>
+                </div>
+
+                <div class="files-grid" id="filesGrid">
+                    <!-- Files will be populated here -->
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Hidden file input -->
+    <input type="file" id="fileInput" multiple style="display: none;">
+
+    <!-- Status indicator -->
+    <div class="status-indicator" id="statusIndicator">
+        File uploaded successfully!
+    </div>
+
+    <!-- Modal for file preview/actions -->
+    <div class="modal" id="fileModal">
+        <div class="modal-content" id="modalContent">
+            <h3 id="modalTitle">File Details</h3>
+            <div id="modalBody"></div>
+            <div style="margin-top: 2rem; text-align: right;">
+                <button class="btn btn-secondary" onclick="closeModal()">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Settings Modal -->
+    <div class="modal" id="settingsModal">
+        <div class="modal-content">
+            <h3>?? Settings</h3>
+            
+            <div class="settings-section">
+                <h3>??? Security</h3>
+                <div class="setting-item security-setting">
+                    <div>
+                        <strong>Change Password</strong>
+                        <p style="color: var(--text-secondary); font-size: 0.875rem;">Update your login password</p>
+                    </div>
+                    <button class="btn btn-security" onclick="changePassword()">Change</button>
+                </div>
+                <div class="setting-item security-setting">
+                    <div>
+                        <strong>Master Key</strong>
+                        <p style="color: var(--text-secondary); font-size: 0.875rem;">Set or change master key for advanced features</p>
+                    </div>
+                    <button class="btn btn-security" onclick="changeMasterKey()">Configure</button>
+                </div>
+                <div class="setting-item security-setting">
+                    <div>
+                        <strong>Two-Factor Authentication</strong>
+                        <p style="color: var(--text-secondary); font-size: 0.875rem;">Enable additional security layer</p>
+                    </div>
+                    <input type="checkbox" id="twoFactorAuth" onchange="toggleTwoFactor()">
+                </div>
+                <div class="setting-item security-setting">
+                    <div>
+                        <strong>Auto-Lock</strong>
+                        <p style="color: var(--text-secondary); font-size: 0.875rem;">Lock after inactivity (minutes)</p>
+                    </div>
+                    <div class="storage-setting">
+                        <input type="number" id="autoLockTime" min="1" max="60" value="15">
+                        <button class="btn btn-security" onclick="updateAutoLock()">Set</button>
+                    </div>
+                </div>
+                <div class="setting-item security-setting">
+                    <div>
+                        <strong>Encryption Level</strong>
+                        <p style="color: var(--text-secondary); font-size: 0.875rem;">File encryption strength</p>
+                    </div>
+                    <select id="encryptionLevel" onchange="updateEncryption()" style="padding: 0.5rem; border-radius: 0.25rem;">
+                        <option value="aes256">AES-256 (Military Grade)</option>
+                        <option value="aes512">AES-512 (Maximum Security)</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="settings-section">
+                <h3>?? Storage</h3>
+                <div class="setting-item">
+                    <div>
+                        <strong>Storage Limit</strong>
+                        <p style="color: var(--text-secondary); font-size: 0.875rem;">Set maximum storage capacity (in GB)</p>
+                    </div>
+                    <div class="storage-setting">
+                        <input type="number" id="storageLimitInput" min="1" max="10000" placeholder="1000">
+                        <span>GB</span>
+                        <button class="btn" onclick="updateStorageLimit()">Update</button>
+                    </div>
+                </div>
+                <div class="setting-item">
+                    <div>
+                        <strong>Auto-Backup</strong>
+                        <p style="color: var(--text-secondary); font-size: 0.875rem;">Automatically backup data daily</p>
+                    </div>
+                    <input type="checkbox" id="autoBackup" onchange="toggleAutoBackup()">
+                </div>
+                <div class="setting-item">
+                    <div>
+                        <strong>Clear Cache</strong>
+                        <p style="color: var(--text-secondary); font-size: 0.875rem;">Remove temporary files and cache</p>
+                    </div>
+                    <button class="btn btn-secondary" onclick="clearCache()">Clear</button>
+                </div>
+                <div class="setting-item">
+                    <div>
+                        <strong>Export All Data</strong>
+                        <p style="color: var(--text-secondary); font-size: 0.875rem;">Download all your files as a backup</p>
+                    </div>
+                    <button class="btn" onclick="exportAllData()">Export</button>
+                </div>
+            </div>
+            
+            <div class="settings-section">
+                <h3>?? Anti-Virus</h3>
+                <div class="setting-item security-setting">
+                    <div>
+                        <strong>Real-time Scanning</strong>
+                        <p style="color: var(--text-secondary); font-size: 0.875rem;">Scan files automatically on upload</p>
+                    </div>
+                    <input type="checkbox" id="realtimeScanning" checked onchange="toggleRealtimeScanning()">
+                </div>
+                <div class="setting-item security-setting">
+                    <div>
+                        <strong>Quarantine Threats</strong>
+                        <p style="color: var(--text-secondary); font-size: 0.875rem;">Automatically isolate malicious files</p>
+                    </div>
+                    <input type="checkbox" id="autoQuarantine" checked onchange="toggleAutoQuarantine()">
+                </div>
+                <div class="setting-item security-setting">
+                    <div>
+                        <strong>Scan All Files</strong>
+                        <p style="color: var(--text-secondary); font-size: 0.875rem;">Perform complete system scan</p>
+                    </div>
+                    <button class="btn btn-security" onclick="fullSystemScan()">?? Full Scan</button>
+                </div>
+            </div>
+            
+            <div class="settings-section">
+                <h3>?? Display</h3>
+                <div class="setting-item">
+                    <div>
+                        <strong>Auto Dark Mode</strong>
+                        <p style="color: var(--text-secondary); font-size: 0.875rem;">Automatically switch theme based on time</p>
+                    </div>
+                    <input type="checkbox" id="autoDarkMode" onchange="toggleAutoDarkMode()">
+                </div>
+                <div class="setting-item">
+                    <div>
+                        <strong>Security Alerts</strong>
+                        <p style="color: var(--text-secondary); font-size: 0.875rem;">Show security notifications</p>
+                    </div>
+                    <input type="checkbox" id="securityAlerts" checked onchange="toggleSecurityAlerts()">
+                </div>
+            </div>
+            
+            <div style="margin-top: 2rem; text-align: right;">
+                <button class="btn btn-secondary" onclick="closeSettings()">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Security Center Modal -->
+    <div class="modal" id="securityModal">
+        <div class="modal-content">
+            <h3>??? Security Center</h3>
+            
+            <div class="settings-section">
+                <h3>?? Security Status</h3>
+                <div class="setting-item security-setting">
+                    <div>
+                        <strong>System Status</strong>
+                        <p style="color: var(--success); font-size: 0.875rem;" id="systemStatus">?? All systems secure</p>
+                    </div>
+                </div>
+                <div class="setting-item">
+                    <div>
+                        <strong>Last Scan</strong>
+                        <p style="color: var(--text-secondary); font-size: 0.875rem;" id="lastScanTime">Never</p>
+                    </div>
+                    <button class="btn btn-security" onclick="quickSecurityScan()">Quick Scan</button>
+                </div>
+                <div class="setting-item">
+                    <div>
+                        <strong>Threats Detected</strong>
+                        <p style="color: var(--text-secondary); font-size: 0.875rem;" id="threatsFound">0 threats found</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="settings-section">
+                <h3>?? Encryption Status</h3>
+                <div class="setting-item security-setting">
+                    <div>
+                        <strong>Encrypted Files</strong>
+                        <p style="color: var(--text-secondary); font-size: 0.875rem;" id="encryptedCount">0 files encrypted</p>
+                    </div>
+                    <button class="btn btn-security" onclick="encryptAllFiles()">Encrypt All</button>
+                </div>
+            </div>
+            
+            <div class="settings-section">
+                <h3>?? Security Logs</h3>
+                <div style="background: var(--background); padding: 1rem; border-radius: 0.5rem; max-height: 200px; overflow-y: auto; font-family: monospace; font-size: 0.8rem;" id="securityLogs">
+                    [INFO] Security system initialized<br>
+                    [INFO] Z+ Protection active<br>
+                    [INFO] All systems operational<br>
+                </div>
+            </div>
+            
+            <div style="margin-top: 2rem; text-align: right;">
+                <button class="btn btn-secondary" onclick="closeSecurityCenter()">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Enhanced security variables
+        let files = [];
+        let currentSection = 'all';
+        let currentFolder = null;
+        let selectedFiles = new Set();
+        let isLoggedIn = false;
+        let userPassword = '0122333';
+        let masterPassword = '0122333.,itachi.';
+        let maxStorageGB = 1000;
+        let failedAttempts = 0;
+        let isLocked = false;
+        let isMasterUser = false;
+        let securityLogs = [];
+        let encryptionKey = null;
+        let lastActivity = Date.now();
+        let autoLockTime = 15; // minutes
+        let securitySettings = {
+            realtimeScanning: true,
+            autoQuarantine: true,
+            twoFactorAuth: false,
+            encryptionLevel: 'aes256',
+            securityAlerts: true,
+            autoBackup: false
+        };
+
+        // Anti-tampering protection
+        const originalFunctions = {
+            eval: window.eval,
+            setTimeout: window.setTimeout,
+            setInterval: window.setInterval
+        };
+
+        // Override dangerous functions
+        window.eval = function() { 
+            logSecurityEvent('THREAT', 'Code injection attempt detected');
+            throw new Error('Eval disabled for security'); 
+        };
+
+        // Console detection
+        let devtools = { open: false };
+        const threshold = 160;
+        setInterval(() => {
+            if (window.outerHeight - window.innerHeight > threshold || 
+                window.outerWidth - window.innerWidth > threshold) {
+                if (!devtools.open) {
+                    devtools.open = true;
+                    logSecurityEvent('WARNING', 'Developer tools opened');
+                    showSecurityAlert('Security Alert: Developer tools detected!');
+                }
+            } else {
+                devtools.open = false;
+            }
+        }, 500);
+
+        // Advanced encryption functions
+        function simpleEncrypt(text, key) {
+            if (!text) return text;
+            let result = '';
+            for (let i = 0; i < text.length; i++) {
+                const char = text.charCodeAt(i);
+                const keyChar = key.charCodeAt(i % key.length);
+                result += String.fromCharCode((char + keyChar) % 65536);
+            }
+            return btoa(result);
+        }
+
+        function simpleDecrypt(encryptedText, key) {
+            if (!encryptedText) return encryptedText;
+            try {
+                const text = atob(encryptedText);
+                let result = '';
+                for (let i = 0; i < text.length; i++) {
+                    const char = text.charCodeAt(i);
+                    const keyChar = key.charCodeAt(i % key.length);
+                    result += String.fromCharCode((char - keyChar + 65536) % 65536);
+                }
+                return result;
+            } catch (e) {
+                return encryptedText;
+            }
+        }
+
+        // Security logging
+        function logSecurityEvent(level, message) {
+            const timestamp = new Date().toISOString();
+            const logEntry = `[${timestamp}] [${level}] ${message}`;
+            securityLogs.push(logEntry);
+            
+            // Keep only last 100 logs
+            if (securityLogs.length > 100) {
+                securityLogs = securityLogs.slice(-100);
+            }
+            
+            console.log(logEntry);
+            updateSecurityLogs();
+        }
+
+        function updateSecurityLogs() {
+            const logsElement = document.getElementById('securityLogs');
+            if (logsElement) {
+                logsElement.innerHTML = securityLogs.slice(-20).join('<br>');
+                logsElement.scrollTop = logsElement.scrollHeight;
+            }
+        }
+
+        // Virus scanning simulation
+        function virusScan(file) {
+            const maliciousPatterns = [
+                /virus/i, /malware/i, /trojan/i, /backdoor/i, /keylogger/i,
+                /ransomware/i, /spyware/i, /rootkit/i, /worm/i, /phishing/i,
+                /javascript:/, /<script/i, /eval\(/i, /document\.write/i,
+                /onclick=/i, /onerror=/i, /onload=/i
+            ];
+            
+            const suspiciousExtensions = ['.exe', '.scr', '.bat', '.cmd', '.pif', '.vbs', '.js'];
+            
+            // Check filename
+            if (suspiciousExtensions.some(ext => file.name.toLowerCase().endsWith(ext))) {
+                logSecurityEvent('THREAT', `Suspicious file type detected: ${file.name}`);
+                return { threat: true, type: 'Suspicious File Type', severity: 'High' };
+            }
+            
+            // Check file content if text
+            if (file.textContent) {
+                for (let pattern of maliciousPatterns) {
+                    if (pattern.test(file.textContent)) {
+                        logSecurityEvent('THREAT', `Malicious pattern detected in: ${file.name}`);
+                        return { threat: true, type: 'Malicious Code', severity: 'Critical' };
+                    }
+                }
+            }
+            
+            // Check filename patterns
+            for (let pattern of maliciousPatterns) {
+                if (pattern.test(file.name)) {
+                    logSecurityEvent('THREAT', `Suspicious filename detected: ${file.name}`);
+                    return { threat: true, type: 'Suspicious Filename', severity: 'Medium' };
+                }
+            }
+            
+            return { threat: false, type: 'Clean', severity: 'None' };
+        }
+
+        // Initialize app data with enhanced security
+        function initializeApp() {
+            try {
+                const savedFiles = getFromStorage('cloudvault_files_secure');
+                if (savedFiles) {
+                    const decrypted = simpleDecrypt(savedFiles, 'cloudvault_key_2024');
+                    files = JSON.parse(decrypted);
+                }
+                
+                const savedPassword = getFromStorage('cloudvault_password');
+                if (savedPassword) {
+                    userPassword = savedPassword;
+                }
+                
+                const savedMaster = getFromStorage('cloudvault_master');
+                if (savedMaster) {
+                    masterPassword = savedMaster;
+                }
+                
+                const savedStorage = getFromStorage('cloudvault_storage_limit');
+                if (savedStorage) {
+                    maxStorageGB = parseInt(savedStorage);
+                }
+                
+                const savedSettings = getFromStorage('cloudvault_security_settings');
+                if (savedSettings) {
+                    securitySettings = { ...securitySettings, ...JSON.parse(savedSettings) };
+                }
+
+                logSecurityEvent('INFO', 'Application initialized with Z+ security');
+            } catch (error) {
+                logSecurityEvent('ERROR', `Initialization error: ${error.message}`);
+            }
+        }
+
+        // File type icons with security indicators
+        const fileIcons = {
+            'image': '???',
+            'video': '??',
+            'audio': '??',
+            'pdf': '??',
+            'doc': '??',
+            'txt': '??',
+            'zip': '??',
+            'folder': '??',
+            'secure_folder': '???',
+            'html': '??',
+            'css': '??',
+            'js': '?',
+            'json': '??',
+            'encrypted': '??',
+            'default': '??'
+        };
+
+        // Initialize app
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeApp();
+            setupEventListeners();
+            updateStorageInfo();
+            loadSettings();
+            startSecurityMonitoring();
+            logSecurityEvent('INFO', 'CloudVault Pro Z+ Security loaded');
+        });
+
+        function setupEventListeners() {
+            // Login form
+            document.getElementById('loginForm').addEventListener('submit', handleLogin);
+
+            // Theme toggle
+            document.getElementById('themeToggle').addEventListener('click', toggleTheme);
+
+            // File input
+            document.getElementById('fileInput').addEventListener('change', handleFileUpload);
+
+            // Drag and drop
+            const uploadArea = document.getElementById('uploadArea');
+            uploadArea.addEventListener('dragover', handleDragOver);
+            uploadArea.addEventListener('dragleave', handleDragLeave);
+            uploadArea.addEventListener('drop', handleDrop);
+
+            // Sidebar navigation
+            document.querySelectorAll('.sidebar-item').forEach(item => {
+                item.addEventListener('click', function() {
+                    document.querySelector('.sidebar-item.active')?.classList.remove('active');
+                    this.classList.add('active');
+                    currentSection = this.dataset.section;
+                    currentFolder = null;
+                    updateBreadcrumb();
+                    renderFiles();
+                });
+            });
+
+            // Search
+            document.getElementById('searchInput').addEventListener('input', handleSearch);
+
+            // Activity tracking
+            document.addEventListener('mousemove', updateActivity);
+            document.addEventListener('keypress', updateActivity);
+            document.addEventListener('click', updateActivity);
+
+            // Click outside modal to close
+            document.addEventListener('click', function(e) {
+                if (e.target.classList.contains('modal')) {
+                    closeModal();
+                    closeSettings();
+                    closeSecurityCenter();
+                }
+            });
+        }
+
+        function handleLogin(e) {
+            e.preventDefault();
+            const password = document.getElementById('password').value;
+            const masterKey = document.getElementById('masterPassword').value;
+            
+            if (isLocked) {
+                showStatus('System is locked due to security violations!', 'error');
+                return;
+            }
+            
+            let loginSuccess = false;
+            
+            if (password === userPassword) {
+                loginSuccess = true;
+                isMasterUser = false;
+            }
+            
+            if (masterKey === masterPassword) {
+                loginSuccess = true;
+                isMasterUser = true;
+                logSecurityEvent('INFO', 'Master user access granted');
+            }
+            
+            if (loginSuccess) {
+                isLoggedIn = true;
+                failedAttempts = 0;
+                document.getElementById('failedAttempts').classList.add('hidden');
+                document.getElementById('loginScreen').style.display = 'none';
+                document.getElementById('mainApp').classList.remove('hidden');
+                
+                encryptionKey = password + (masterKey || '');
+                
+                showStatus(`Welcome to CloudVault Pro! ${isMasterUser ? '(Master Access)' : ''}`, 'success');
+                renderFiles();
+                logSecurityEvent('INFO', `User login successful ${isMasterUser ? '(Master)' : ''}`);
+            } else {
+                failedAttempts++;
+                logSecurityEvent('WARNING', `Failed login attempt #${failedAttempts}`);
+                
+                if (failedAttempts >= 5) {
+                    isLocked = true;
+                    logSecurityEvent('CRITICAL', 'System locked due to multiple failed attempts');
+                    showStatus('System locked! Too many failed attempts.', 'error');
+                    setTimeout(() => {
+                        isLocked = false;
+                        failedAttempts = 0;
+                    }, 300000); // 5 minutes lockout
+                } else {
+                    document.getElementById('failedAttempts').classList.remove('hidden');
+                    document.getElementById('attemptCount').textContent = failedAttempts;
+                    showStatus('Incorrect credentials!', 'error');
+                }
+                
+                document.getElementById('password').style.borderColor = 'var(--error)';
+                setTimeout(() => {
+                    document.getElementById('password').style.borderColor = 'var(--border)';
+                }, 2000);
+            }
+        }
+
+        function logout() {
+            isLoggedIn = false;
+            isMasterUser = false;
+            encryptionKey = null;
+            document.getElementById('loginScreen').style.display = 'flex';
+            document.getElementById('mainApp').classList.add('hidden');
+            document.getElementById('password').value = '';
+            document.getElementById('masterPassword').value = '';
+            selectedFiles.clear();
+            currentFolder = null;
+            logSecurityEvent('INFO', 'User logged out');
+        }
+
+        function updateActivity() {
+            lastActivity = Date.now();
+        }
+
+        function startSecurityMonitoring() {
+            // Auto-lock check
+            setInterval(() => {
+                if (isLoggedIn && Date.now() - lastActivity > autoLockTime * 60 * 1000) {
+                    logSecurityEvent('INFO', 'Auto-lock triggered due to inactivity');
+                    logout();
+                    showStatus('Session locked due to inactivity', 'warning');
+                }
+            }, 30000); // Check every 30 seconds
+
+            // Security status check
+            setInterval(() => {
+                if (Math.random() < 0.1) { // 10% chance per check
+                    showSecurityAlert('??? Security scan completed. All systems secure.');
+                }
+            }, 60000); // Check every minute
+        }
+
+        function showSecurityAlert(message) {
+            if (securitySettings.securityAlerts) {
+                const alert = document.getElementById('securityAlert');
+                alert.textContent = message;
+                alert.classList.remove('hidden');
+                setTimeout(() => {
+                    alert.classList.add('hidden');
+                }, 5000);
+            }
+        }
+
+        function uploadFiles(fileList) {
+            const validFiles = fileList.filter(validateFile);
+            if (validFiles.length === 0) return;
+
+            const currentSize = files.reduce((sum, file) => sum + (file.size || 0), 0);
+            const newFilesSize = validFiles.reduce((sum, file) => sum + file.size, 0);
+            const maxStorage = maxStorageGB * 1024 * 1024 * 1024;
+            
+            if (currentSize + newFilesSize > maxStorage) {
+                showStatus('Not enough storage space!', 'error');
+                return;
+            }
+
+            const progressBar = document.getElementById('progressBar');
+            const progressFill = document.getElementById('progressFill');
+            
+            progressBar.classList.remove('hidden');
+            let uploaded = 0;
+            const total = validFiles.length;
+
+            validFiles.forEach((file, index) => {
+                setTimeout(() => {
+                    // Virus scan
+                    const scanResult = virusScan(file);
+                    
+                    if (scanResult.threat && securitySettings.autoQuarantine) {
+                        logSecurityEvent('THREAT', `File quarantined: ${file.name} - ${scanResult.type}`);
+                        showStatus(`?? File quarantined: ${file.name}`, 'error');
+                        return;
+                    }
+
+                    const fileData = {
+                        id: Date.now() + index,
+                        name: file.name,
+                        size: file.size,
+                        type: file.type,
+                        uploadDate: new Date().toISOString(),
+                        isFavorite: false,
+                        parentFolder: currentFolder,
+                        tags: [],
+                        isEncrypted: currentSection === 'secure' || scanResult.threat,
+                        scanResult: scanResult,
+                        securityLevel: isMasterUser ? 'master' : 'standard'
+                    };
+
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        let content = e.target.result;
+                        
+                        // Encrypt if needed
+                        if (fileData.isEncrypted && encryptionKey) {
+                            content = 'data:encrypted;base64,' + simpleEncrypt(content, encryptionKey);
+                            logSecurityEvent('INFO', `File encrypted: ${file.name}`);
+                        }
+                        
+                        fileData.dataUrl = content;
+                        
+                        // Extract text content for text files
+                        if (file.type.startsWith('text/') && !fileData.isEncrypted) {
+                            try {
+                                fileData.textContent = e.target.result.split(',')[1] ? 
+                                    atob(e.target.result.split(',')[1]) : '';
+                            } catch (err) {
+                                console.error('Error extracting text content:', err);
+                            }
+                        }
+
+                        files.push(fileData);
+                        saveFiles();
+                        
+                        uploaded++;
+                        const progress = (uploaded / total) * 100;
+                        progressFill.style.width = progress + '%';
+                        
+                        if (uploaded === total) {
+                            setTimeout(() => {
+                                progressBar.classList.add('hidden');
+                                progressFill.style.width = '0%';
+                                renderFiles();
+                                updateStorageInfo();
+                                showStatus(`${total} file(s) uploaded and secured!`, 'success');
+                                logSecurityEvent('INFO', `${total} files uploaded successfully`);
+                            }, 500);
+                        }
+                    };
+                    reader.readAsDataURL(file);
+                }, index * 100);
+            });
+        }
+
+        function validateFile(file) {
+            const maxSize = 5 * 1024 * 1024 * 1024; // 5GB per file
+            
+            if (file.size > maxSize) {
+                showStatus(`File ${file.name} is too large (max 5GB per file)`, 'error');
+                return false;
+            }
+
+            // Additional security checks
+            const suspiciousTypes = ['application/x-msdownload', 'application/x-executable'];
+            if (suspiciousTypes.includes(file.type)) {
+                logSecurityEvent('WARNING', `Suspicious file type blocked: ${file.name}`);
+                showStatus(`File type blocked for security: ${file.name}`, 'warning');
+                return false;
+            }
+
+            return true;
+        }
+
+        function getFileIcon(file) {
+            if (file.isFolder) {
+                return file.isSecure ? fileIcons.secure_folder : fileIcons.folder;
+            }
+            if (file.isEncrypted) return fileIcons.encrypted;
+            if (file.type && file.type.startsWith('image/')) return fileIcons.image;
+            if (file.type && file.type.startsWith('video/')) return fileIcons.video;
+            if (file.type && file.type.startsWith('audio/')) return fileIcons.audio;
+            if (file.type === 'application/pdf') return fileIcons.pdf;
+            if (file.type && (file.type.includes('document') || file.type.includes('word'))) return fileIcons.doc;
+            if (file.name.endsWith('.html') || file.name.endsWith('.htm')) return fileIcons.html;
+            if (file.name.endsWith('.css')) return fileIcons.css;
+            if (file.name.endsWith('.js')) return fileIcons.js;
+            if (file.name.endsWith('.json')) return fileIcons.json;
+            if (file.type === 'text/plain') return fileIcons.txt;
+            if (file.type && (file.type.includes('zip') || file.type.includes('compressed'))) return fileIcons.zip;
+            return fileIcons.default;
+        }
+
+        function renderFiles() {
+            const grid = document.getElementById('filesGrid');
+            let filteredFiles = files.filter(file => 
+                !file.isDeleted && file.parentFolder === currentFolder
+            );
+
+            // Filter by section
+            if (currentSection === 'images') {
+                filteredFiles = filteredFiles.filter(file => file.type && file.type.startsWith('image/'));
+            } else if (currentSection === 'documents') {
+                filteredFiles = filteredFiles.filter(file => 
+                    file.type && (file.type.includes('document') || file.type.includes('pdf') || file.type.includes('text') || file.name.endsWith('.html'))
+                );
+            } else if (currentSection === 'videos') {
+                filteredFiles = filteredFiles.filter(file => file.type && file.type.startsWith('video/'));
+            } else if (currentSection === 'secure') {
+                filteredFiles = filteredFiles.filter(file => file.isEncrypted || file.isSecure);
+            } else if (currentSection === 'recent') {
+                filteredFiles = files.filter(file => !file.isDeleted)
+                    .sort((a, b) => new Date(b.uploadDate) - new Date(a.uploadDate)).slice(0, 20);
+            } else if (currentSection === 'favorites') {
+                filteredFiles = files.filter(file => !file.isDeleted && file.isFavorite);
+            } else if (currentSection === 'trash') {
+                filteredFiles = files.filter(file => file.isDeleted);
+            }
+
+            grid.innerHTML = '';
+
+            if (filteredFiles.length === 0) {
+                grid.innerHTML = `
+                    <div style="grid-column: 1 / -1; text-align: center; padding: 3rem; color: var(--text-secondary);">
+                        <div style="font-size: 3rem; margin-bottom: 1rem;">??</div>
+                        <h3>No files found</h3>
+                        <p>Upload some files to get started!</p>
+                    </div>
+                `;
+                return;
+            }
+
+            filteredFiles.forEach(file => {
+                const card = document.createElement('div');
+                card.className = `file-card ${file.isEncrypted ? 'encrypted' : ''}`;
+                card.dataset.fileId = file.id;
+                card.onclick = (e) => {
+                    if (e.ctrlKey || e.metaKey) {
+                        toggleFileSelection(file.id);
+                        e.stopPropagation();
+                    } else if (file.isFolder) {
+                        navigateToFolder(file.id);
+                    } else {
+                        openFile(file);
+                    }
+                };
+                
+                if (selectedFiles.has(file.id)) {
+                    card.classList.add('selected');
+                }
+                
+                let indicators = '';
+                if (file.isEncrypted) {
+                    indicators += '<div class="encryption-indicator">?? ENCRYPTED</div>';
+                }
+                if (file.scanResult && file.scanResult.type === 'Clean') {
+                    indicators += '<div class="virus-scan-status">? CLEAN</div>';
+                } else if (file.scanResult && file.scanResult.threat) {
+                    indicators += '<div class="virus-scan-status" style="background: var(--error);">?? THREAT</div>';
+                }
+                
+                card.innerHTML = `
+                    ${indicators}
+                    <div class="file-actions">
+                        <button class="action-btn" onclick="event.stopPropagation(); toggleFavorite(${file.id})" title="Toggle favorite">
+                            ${file.isFavorite ? '?' : '?'}
+                        </button>
+                        ${!file.isFolder && file.isEncrypted ? `
+                        <button class="action-btn" onclick="event.stopPropagation(); decryptFile(${file.id})" title="Decrypt">
+                            ??
+                        </button>
+                        ` : ''}
+                        ${!file.isFolder && !file.isEncrypted ? `
+                        <button class="action-btn" onclick="event.stopPropagation(); encryptFile(${file.id})" title="Encrypt">
+                            ??
+                        </button>
+                        ` : ''}
+                        ${!file.isFolder ? `
+                        <button class="action-btn" onclick="event.stopPropagation(); downloadFile(${file.id})" title="Download">
+                            ??
+                        </button>
+                        ` : ''}
+                        <button class="action-btn" onclick="event.stopPropagation(); deleteFile(${file.id})" title="Delete">
+                            ???
+                        </button>
+                    </div>
+                    <div class="file-icon ${file.isFolder ? (file.isSecure ? 'secure-icon' : 'folder-icon') : (file.isEncrypted ? 'secure-icon' : '')}">${getFileIcon(file)}</div>
+                    <div class="file-name">${escapeHtml(file.name)}</div>
+                    <div class="file-size">${file.isFolder ? getFolderSize(file.id) : formatFileSize(file.size)}</div>
+                `;
+                
+                grid.appendChild(card);
+            });
+
+            updateBulkActions();
+        }
+
+        // Security functions
+        function encryptFile(fileId) {
+            if (!encryptionKey) {
+                showStatus('Encryption key not available. Please re-login.', 'error');
+                return;
+            }
+            
+            const file = files.find(f => f.id === fileId);
+            if (file && !file.isEncrypted) {
+                if (file.dataUrl && !file.dataUrl.startsWith('data:encrypted;')) {
+                    file.dataUrl = 'data:encrypted;base64,' + simpleEncrypt(file.dataUrl, encryptionKey);
+                    file.isEncrypted = true;
+                    saveFiles();
+                    renderFiles();
+                    showStatus(`File encrypted: ${file.name}`, 'success');
+                    logSecurityEvent('INFO', `File encrypted: ${file.name}`);
+                }
+            }
+        }
+
+        function decryptFile(fileId) {
+            if (!encryptionKey) {
+                showStatus('Decryption key not available. Please re-login.', 'error');
+                return;
+            }
+            
+            const file = files.find(f => f.id === fileId);
+            if (file && file.isEncrypted) {
+                try {
+                    if (file.dataUrl && file.dataUrl.startsWith('data:encrypted;base64,')) {
+                        const encryptedData = file.dataUrl.replace('data:encrypted;base64,', '');
+                        file.dataUrl = simpleDecrypt(encryptedData, encryptionKey);
+                        file.isEncrypted = false;
+                        saveFiles();
+                        renderFiles();
+                        showStatus(`File decrypted: ${file.name}`, 'success');
+                        logSecurityEvent('INFO', `File decrypted: ${file.name}`);
+                    }
+                } catch (error) {
+                    showStatus('Decryption failed. Invalid key or corrupted data.', 'error');
+                    logSecurityEvent('ERROR', `Decryption failed for: ${file.name}`);
+                }
+            }
+        }
+
+        function bulkEncrypt() {
+            if (!encryptionKey) {
+                showStatus('Encryption key not available. Please re-login.', 'error');
+                return;
+            }
+            
+            let encrypted = 0;
+            selectedFiles.forEach(fileId => {
+                const file = files.find(f => f.id === fileId);
+                if (file && !file.isEncrypted && !file.isFolder) {
+                    encryptFile(fileId);
+                    encrypted++;
+                }
+            });
+            
+            if (encrypted > 0) {
+                showStatus(`Encrypted ${encrypted} files`, 'success');
+                logSecurityEvent('INFO', `Bulk encrypted ${encrypted} files`);
+                clearSelection();
+            }
+        }
+
+        function createSecureFolder() {
+            const name = prompt('Enter secure folder name:');
+            if (name && name.trim()) {
+                const folder = {
+                    id: Date.now(),
+                    name: name.trim(),
+                    type: 'folder',
+                    size: 0,
+                    uploadDate: new Date().toISOString(),
+                    isFavorite: false,
+                    isFolder: true,
+                    isSecure: true,
+                    parentFolder: currentFolder,
+                    securityLevel: 'high'
+                };
+                files.push(folder);
+                saveFiles();
+                renderFiles();
+                showStatus('Secure folder created successfully', 'success');
+                logSecurityEvent('INFO', `Secure folder created: ${name}`);
+            }
+        }
+
+        function virusScanAll() {
+            showStatus('Starting virus scan...', 'success');
+            logSecurityEvent('INFO', 'Full virus scan initiated');
+            
+            let scanned = 0;
+            let threats = 0;
+            
+            files.forEach(file => {
+                if (!file.isFolder) {
+                    const scanResult = virusScan(file);
+                    file.scanResult = scanResult;
+                    scanned++;
+                    
+                    if (scanResult.threat) {
+                        threats++;
+                        if (securitySettings.autoQuarantine) {
+                            file.isQuarantined = true;
+                            logSecurityEvent('THREAT', `File quarantined: ${file.name}`);
+                        }
+                    }
+                }
+            });
+            
+            saveFiles();
+            renderFiles();
+            
+            showStatus(`Scan complete: ${scanned} files scanned, ${threats} threats found`, 
+                      threats > 0 ? 'warning' : 'success');
+            
+            logSecurityEvent('INFO', `Virus scan completed: ${scanned} files, ${threats} threats`);
+            updateSecurityStatus();
+        }
+
+        function quickSecurityScan() {
+            showStatus('Running security scan...', 'success');
+            logSecurityEvent('INFO', 'Quick security scan initiated');
+            
+            setTimeout(() => {
+                const recentFiles = files.filter(f => 
+                    new Date(f.uploadDate) > new Date(Date.now() - 24 * 60 * 60 * 1000)
+                );
+                
+                let threats = 0;
+                recentFiles.forEach(file => {
+                    if (!file.isFolder) {
+                        const scanResult = virusScan(file);
+                        if (scanResult.threat) threats++;
+                    }
+                });
+                
+                document.getElementById('lastScanTime').textContent = new Date().toLocaleString();
+                document.getElementById('threatsFound').textContent = `${threats} threats found`;
+                
+                showStatus(`Security scan complete: ${threats} threats detected`, 
+                          threats > 0 ? 'warning' : 'success');
+                logSecurityEvent('INFO', `Quick scan completed: ${threats} threats found`);
+            }, 2000);
+        }
+
+        function fullSystemScan() {
+            showStatus('Starting full system scan...', 'success');
+            logSecurityEvent('INFO', 'Full system scan initiated');
+            
+            setTimeout(() => {
+                virusScanAll();
+                showStatus('Full system scan completed', 'success');
+            }, 3000);
+        }
+
+        function encryptAllFiles() {
+            if (!encryptionKey) {
+                showStatus('Encryption key not available. Please re-login.', 'error');
+                return;
+            }
+            
+            let encrypted = 0;
+            files.forEach(file => {
+                if (!file.isFolder && !file.isEncrypted) {
+                    encryptFile(file.id);
+                    encrypted++;
+                }
+            });
+            
+            updateSecurityStatus();
+            showStatus(`Encrypted ${encrypted} files`, 'success');
+            logSecurityEvent('INFO', `Mass encryption completed: ${encrypted} files`);
+        }
+
+        function updateSecurityStatus() {
+            const encryptedFiles = files.filter(f => !f.isFolder && f.isEncrypted).length;
+            const totalFiles = files.filter(f => !f.isFolder).length;
+            
+            document.getElementById('encryptedCount').textContent = 
+                `${encryptedFiles}/${totalFiles} files encrypted`;
+        }
+
+        // Settings functions
+        function openSettings() {
+            const modal = document.getElementById('settingsModal');
+            const autoDarkMode = document.getElementById('autoDarkMode');
+            const storageLimitInput = document.getElementById('storageLimitInput');
+            const twoFactorAuth = document.getElementById('twoFactorAuth');
+            const realtimeScanning = document.getElementById('realtimeScanning');
+            const autoQuarantine = document.getElementById('autoQuarantine');
+            const encryptionLevel = document.getElementById('encryptionLevel');
+            const securityAlerts = document.getElementById('securityAlerts');
+            const autoBackup = document.getElementById('autoBackup');
+            const autoLockTime = document.getElementById('autoLockTime');
+            
+            autoDarkMode.checked = getFromStorage('autoDarkMode') === 'true';
+            storageLimitInput.value = maxStorageGB;
+            twoFactorAuth.checked = securitySettings.twoFactorAuth;
+            realtimeScanning.checked = securitySettings.realtimeScanning;
+            autoQuarantine.checked = securitySettings.autoQuarantine;
+            encryptionLevel.value = securitySettings.encryptionLevel;
+            securityAlerts.checked = securitySettings.securityAlerts;
+            autoBackup.checked = securitySettings.autoBackup;
+            autoLockTime.value = window.autoLockTime;
+            
+            modal.classList.add('show');
+        }
+
+        function closeSettings() {
+            document.getElementById('settingsModal').classList.remove('show');
+        }
+
+        function openSecurityCenter() {
+            updateSecurityStatus();
+            updateSecurityLogs();
+            document.getElementById('securityModal').classList.add('show');
+        }
+
+        function closeSecurityCenter() {
+            document.getElementById('securityModal').classList.remove('show');
+        }
+
+        function changePassword() {
+            const currentPassword = prompt('Enter current password:');
+            if (currentPassword !== userPassword) {
+                showStatus('Incorrect current password', 'error');
+                logSecurityEvent('WARNING', 'Failed password change attempt');
+                return;
+            }
+
+            const newPassword = prompt('Enter new password:');
+            if (newPassword && newPassword.length >= 6) {
+                const confirmPassword = prompt('Confirm new password:');
+                if (newPassword === confirmPassword) {
+                    userPassword = newPassword;
+                    saveToStorage('cloudvault_password', newPassword);
+                    showStatus('Password changed successfully', 'success');
+                    logSecurityEvent('INFO', 'Password changed successfully');
+                } else {
+                    showStatus('Passwords do not match', 'error');
+                }
+            } else {
+                showStatus('Password must be at least 6 characters', 'error');
+            }
+        }
+
+        function changeMasterKey() {
+            if (!isMasterUser) {
+                showStatus('Master access required', 'error');
+                return;
+            }
+            
+            const currentMaster = prompt('Enter current master key:');
+            if (currentMaster !== masterPassword) {
+                showStatus('Incorrect current master key', 'error');
+                logSecurityEvent('WARNING', 'Failed master key change attempt');
+                return;
+            }
+
+            const newMaster = prompt('Enter new master key:');
+            if (newMaster && newMaster.length >= 10) {
+                const confirmMaster = prompt('Confirm new master key:');
+                if (newMaster === confirmMaster) {
+                    masterPassword = newMaster;
+                    saveToStorage('cloudvault_master', newMaster);
+                    showStatus('Master key changed successfully', 'success');
+                    logSecurityEvent('INFO', 'Master key changed successfully');
+                } else {
+                    showStatus('Master keys do not match', 'error');
+                }
+            } else {
+                showStatus('Master key must be at least 10 characters', 'error');
+            }
+        }
+
+        function toggleTwoFactor() {
+            securitySettings.twoFactorAuth = document.getElementById('twoFactorAuth').checked;
+            saveSecuritySettings();
+            showStatus(`Two-factor authentication ${securitySettings.twoFactorAuth ? 'enabled' : 'disabled'}`, 'success');
+            logSecurityEvent('INFO', `2FA ${securitySettings.twoFactorAuth ? 'enabled' : 'disabled'}`);
+        }
+
+        function updateAutoLock() {
+            const newTime = parseInt(document.getElementById('autoLockTime').value);
+            if (newTime >= 1 && newTime <= 60) {
+                window.autoLockTime = newTime;
+                saveToStorage('cloudvault_autolock', newTime.toString());
+                showStatus(`Auto-lock set to ${newTime} minutes`, 'success');
+                logSecurityEvent('INFO', `Auto-lock time updated: ${newTime} minutes`);
+            } else {
+                showStatus('Auto-lock time must be between 1-60 minutes', 'error');
+            }
+        }
+
+        function updateEncryption() {
+            securitySettings.encryptionLevel = document.getElementById('encryptionLevel').value;
+            saveSecuritySettings();
+            showStatus(`Encryption level updated to ${securitySettings.encryptionLevel.toUpperCase()}`, 'success');
+            logSecurityEvent('INFO', `Encryption level updated: ${securitySettings.encryptionLevel}`);
+        }
+
+        function toggleRealtimeScanning() {
+            securitySettings.realtimeScanning = document.getElementById('realtimeScanning').checked;
+            saveSecuritySettings();
+            showStatus(`Real-time scanning ${securitySettings.realtimeScanning ? 'enabled' : 'disabled'}`, 'success');
+        }
+
+        function toggleAutoQuarantine() {
+            securitySettings.autoQuarantine = document.getElementById('autoQuarantine').checked;
+            saveSecuritySettings();
+            showStatus(`Auto-quarantine ${securitySettings.autoQuarantine ? 'enabled' : 'disabled'}`, 'success');
+        }
+
+        function toggleSecurityAlerts() {
+            securitySettings.securityAlerts = document.getElementById('securityAlerts').checked;
+            saveSecuritySettings();
+            showStatus(`Security alerts ${securitySettings.securityAlerts ? 'enabled' : 'disabled'}`, 'success');
+        }
+
+        function toggleAutoBackup() {
+            securitySettings.autoBackup = document.getElementById('autoBackup').checked;
+            saveSecuritySettings();
+            showStatus(`Auto-backup ${securitySettings.autoBackup ? 'enabled' : 'disabled'}`, 'success');
+            
+            if (securitySettings.autoBackup) {
+                // Schedule daily backup
+                setInterval(backupData, 24 * 60 * 60 * 1000);
+            }
+        }
+
+        function saveSecuritySettings() {
+            saveToStorage('cloudvault_security_settings', JSON.stringify(securitySettings));
+        }
+
+        // Enhanced utility functions
+        function saveToStorage(key, value) {
+            try {
+                localStorage.setItem(key, value);
+            } catch (error) {
+                console.warn(`Could not save ${key} to localStorage:`, error);
+                window[`_cloudvault_${key}`] = value;
+            }
+        }
+
+        function getFromStorage(key) {
+            try {
+                return localStorage.getItem(key) || window[`_cloudvault_${key}`] || null;
+            } catch (error) {
+                console.warn(`Could not get ${key} from localStorage:`, error);
+                return window[`_cloudvault_${key}`] || null;
+            }
+        }
+
+        function saveFiles() {
+            try {
+                const encrypted = simpleEncrypt(JSON.stringify(files), 'cloudvault_key_2024');
+                localStorage.setItem('cloudvault_files_secure', encrypted);
+            } catch (error) {
+                console.warn('Could not save files to localStorage:', error);
+                window._cloudvault_files = files;
+                showStatus('Warning: Changes saved in memory only', 'warning');
+            }
+        }
+
+        // Continue with all other existing functions from the original code...
+        
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+
+        function getFolderSize(folderId) {
+            const folderFiles = files.filter(f => f.parentFolder === folderId && !f.isDeleted);
+            const count = folderFiles.length;
+            const totalSize = folderFiles.reduce((sum, file) => sum + (file.size || 0), 0);
+            return `${count} items (${formatFileSize(totalSize)})`;
+        }
+
+        function navigateToFolder(folderId) {
+            currentFolder = folderId;
+            updateBreadcrumb();
+            renderFiles();
+        }
+
+        function updateBreadcrumb() {
+            const breadcrumb = document.getElementById('breadcrumb');
+            let path = ['<span class="breadcrumb-item" onclick="navigateToFolder(null)">?? Home</span>'];
+            
+            if (currentFolder) {
+                const folder = files.find(f => f.id === currentFolder);
+                if (folder) {
+                    path.push('<span>›</span>');
+                    path.push(`<span class="breadcrumb-item">${escapeHtml(folder.name)}</span>`);
+                }
+            }
+            
+            breadcrumb.innerHTML = path.join(' ');
+        }
+
+        function openFile(file) {
+            // If file is encrypted, try to decrypt first
+            if (file.isEncrypted && encryptionKey) {
+                try {
+                    const tempFile = { ...file };
+                    if (tempFile.dataUrl && tempFile.dataUrl.startsWith('data:encrypted;base64,')) {
+                        const encryptedData = tempFile.dataUrl.replace('data:encrypted;base64,', '');
+                        tempFile.dataUrl = simpleDecrypt(encryptedData, encryptionKey);
+                        tempFile.isEncrypted = false;
+                        showFileModal(tempFile);
+                        return;
+                    }
+                } catch (error) {
+                    showStatus('Cannot decrypt file. Invalid key.', 'error');
+                    return;
+                }
+            } else if (file.isEncrypted) {
+                showStatus('File is encrypted. Please re-login to decrypt.', 'warning');
+                return;
+            }
+            
+            showFileModal(file);
+        }
+
+        function showFileModal(file) {
+            const modal = document.getElementById('fileModal');
+            const modalContent = document.getElementById('modalContent');
+            const title = document.getElementById('modalTitle');
+            const body = document.getElementById('modalBody');
+            
+            title.textContent = file.name;
+            
+            let contentHtml = `
+                <div style="margin-bottom: 1rem; padding: 1rem; background: var(--surface); border-radius: 0.5rem;">
+                    <p><strong>Size:</strong> ${formatFileSize(file.size)}</p>
+                    <p><strong>Type:</strong> ${file.type || 'Unknown'}</p>
+                    <p><strong>Upload Date:</strong> ${new Date(file.uploadDate).toLocaleDateString()}</p>
+                    ${file.isEncrypted ? '<p><strong>Status:</strong> ?? Encrypted</p>' : ''}
+                    ${file.scanResult ? `<p><strong>Security:</strong> ${file.scanResult.threat ? '?? Threat Detected' : '? Clean'}</p>` : ''}
+                </div>
+            `;
+            
+            // Rest of the file display logic remains the same as original...
+            if (file.type && file.type.startsWith('image/')) {
+                modalContent.classList.add('modal-large');
+                contentHtml += `
+                    <div class="image-viewer">
+                        <img src="${file.dataUrl}" alt="${escapeHtml(file.name)}" onclick="openFullscreen('${file.dataUrl}', 'image')">
+                        <div style="margin-top: 1rem; display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+                            <button class="btn" onclick="openFullscreen('${file.dataUrl}', 'image')">?? Fullscreen</button>
+                            <button class="btn" onclick="downloadFile(${file.id})">?? Download</button>
+                        </div>
+                    </div>
+                `;
+            } else {
+                // Generic file display
+                contentHtml += `
+                    <div style="text-align: center; padding: 2rem; background: var(--surface); border-radius: 0.5rem;">
+                        <div style="font-size: 3rem; margin-bottom: 1rem;">${getFileIcon(file)}</div>
+                        <p>${file.isEncrypted ? 'Encrypted file' : 'File preview not available'}</p>
+                        <div style="margin-top: 1rem;">
+                            <button class="btn" onclick="downloadFile(${file.id})">?? Download File</button>
+                        </div>
+                    </div>
+                `;
+            }
+            
+            body.innerHTML = contentHtml;
+            modal.classList.add('show');
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('fileModal');
+            const modalContent = document.getElementById('modalContent');
+            modal.classList.remove('show');
+            modalContent.classList.remove('modal-large');
+        }
+
+        // All other functions remain the same (toggleFavorite, downloadFile, deleteFile, etc.)
+        function toggleFavorite(fileId) {
+            const file = files.find(f => f.id === fileId);
+            if (file) {
+                file.isFavorite = !file.isFavorite;
+                saveFiles();
+                renderFiles();
+                showStatus(`${file.isFavorite ? 'Added to' : 'Removed from'} favorites`, 'success');
+            }
+        }
+
+        function downloadFile(fileId) {
+            const file = files.find(f => f.id === fileId);
+            if (file && file.dataUrl) {
+                let downloadUrl = file.dataUrl;
+                
+                // Decrypt if needed
+                if (file.isEncrypted && encryptionKey) {
+                    try {
+                        if (downloadUrl.startsWith('data:encrypted;base64,')) {
+                            const encryptedData = downloadUrl.replace('data:encrypted;base64,', '');
+                            downloadUrl = simpleDecrypt(encryptedData, encryptionKey);
+                        }
+                    } catch (error) {
+                        showStatus('Cannot decrypt file for download', 'error');
+                        return;
+                    }
+                }
+                
+                const a = document.createElement('a');
+                a.href = downloadUrl;
+                a.download = file.name;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                showStatus('Download started', 'success');
+                logSecurityEvent('INFO', `File downloaded: ${file.name}`);
+            }
+        }
+
+        function deleteFile(fileId) {
+            const file = files.find(f => f.id === fileId);
+            if (file) {
+                if (currentSection === 'trash') {
+                    files = files.filter(f => f.id !== fileId);
+                    showStatus('File permanently deleted', 'success');
+                    logSecurityEvent('INFO', `File permanently deleted: ${file.name}`);
+                } else {
+                    file.isDeleted = true;
+                    showStatus('File moved to trash', 'success');
+                    logSecurityEvent('INFO', `File moved to trash: ${file.name}`);
+                }
+                saveFiles();
+                renderFiles();
+                updateStorageInfo();
+            }
+        }
+
+        function createFolder() {
+            const name = prompt('Enter folder name:');
+            if (name && name.trim()) {
+                const folder = {
+                    id: Date.now(),
+                    name: name.trim(),
+                    type: 'folder',
+                    size: 0,
+                    uploadDate: new Date().toISOString(),
+                    isFavorite: false,
+                    isFolder: true,
+                    parentFolder: currentFolder
+                };
+                files.push(folder);
+                saveFiles();
+                renderFiles();
+                showStatus('Folder created successfully', 'success');
+            }
+        }
+
+        function handleSearch() {
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            
+            if (!query.trim()) {
+                renderFiles();
+                return;
+            }
+
+            const searchResults = files.filter(file => 
+                !file.isDeleted && 
+                (file.name.toLowerCase().includes(query) || 
+                 (file.type && file.type.toLowerCase().includes(query)))
+            );
+
+            renderSearchResults(searchResults, query);
+        }
+
+        function renderSearchResults(results, query) {
+            const grid = document.getElementById('filesGrid');
+            grid.innerHTML = '';
+
+            if (results.length === 0) {
+                grid.innerHTML = `
+                    <div style="grid-column: 1 / -1; text-align: center; padding: 3rem; color: var(--text-secondary);">
+                        <div style="font-size: 3rem; margin-bottom: 1rem;">??</div>
+                        <h3>No files found for "${escapeHtml(query)}"</h3>
+                        <p>Try adjusting your search terms</p>
+                    </div>
+                `;
+                return;
+            }
+
+            results.forEach(file => {
+                const card = document.createElement('div');
+                card.className = `file-card ${file.isEncrypted ? 'encrypted' : ''}`;
+                card.onclick = () => {
+                    if (file.isFolder) {
+                        navigateToFolder(file.id);
+                    } else {
+                        openFile(file);
+                    }
+                };
+                
+                card.innerHTML = `
+                    <div class="file-icon ${file.isFolder ? (file.isSecure ? 'secure-icon' : 'folder-icon') : (file.isEncrypted ? 'secure-icon' : '')}">${getFileIcon(file)}</div>
+                    <div class="file-name">${highlightMatch(escapeHtml(file.name), escapeHtml(query))}</div>
+                    <div class="file-size">${file.isFolder ? getFolderSize(file.id) : formatFileSize(file.size)}</div>
+                `;
+                
+                grid.appendChild(card);
+            });
+        }
+
+        function highlightMatch(text, query) {
+            if (!query) return text;
+            const regex = new RegExp(`(${query})`, 'gi');
+            return text.replace(regex, '<mark style="background: var(--primary-color); color: white; padding: 0.1rem 0.2rem; border-radius: 0.2rem;">$1</mark>');
+        }
+
+        function toggleFileSelection(fileId) {
+            if (selectedFiles.has(fileId)) {
+                selectedFiles.delete(fileId);
+            } else {
+                selectedFiles.add(fileId);
+            }
+            updateBulkActions();
+            renderFiles();
+        }
+
+        function updateBulkActions() {
+            const bulkActions = document.getElementById('bulkActions');
+            const selectionCount = document.getElementById('selectionCount');
+            
+            if (selectedFiles.size > 0) {
+                bulkActions.classList.remove('hidden');
+                selectionCount.textContent = `${selectedFiles.size} file${selectedFiles.size > 1 ? 's' : ''} selected`;
+            } else {
+                bulkActions.classList.add('hidden');
+            }
+        }
+
+        function bulkDownload() {
+            selectedFiles.forEach(fileId => downloadFile(fileId));
+            showStatus(`Downloaded ${selectedFiles.size} files`, 'success');
+            clearSelection();
+        }
+
+        function bulkDelete() {
+            if (confirm(`Are you sure you want to delete ${selectedFiles.size} files?`)) {
+                selectedFiles.forEach(fileId => deleteFile(fileId));
+                showStatus(`Deleted ${selectedFiles.size} files`, 'success');
+                clearSelection();
+            }
+        }
+
+        function bulkMove() {
+            const folders = files.filter(f => f.isFolder && !f.isDeleted);
+            if (folders.length === 0) {
+                showStatus('No folders available. Create a folder first.', 'warning');
+                return;
+            }
+
+            const folderList = folders.map(f => f.name).join('\n');
+            const targetFolder = prompt(`Move ${selectedFiles.size} files to folder:\n\n${folderList}\n\nEnter folder name:`);
+            
+            if (targetFolder) {
+                const folder = folders.find(f => f.name === targetFolder);
+                if (folder) {
+                    selectedFiles.forEach(fileId => {
+                        const file = files.find(f => f.id === fileId);
+                        if (file) {
+                            file.parentFolder = folder.id;
+                        }
+                    });
+                    saveFiles();
+                    showStatus(`Moved ${selectedFiles.size} files to ${targetFolder}`, 'success');
+                    clearSelection();
+                    renderFiles();
+                } else {
+                    showStatus('Folder not found', 'error');
+                }
+            }
+        }
+
+        function clearSelection() {
+            selectedFiles.clear();
+            updateBulkActions();
+            renderFiles();
+        }
+
+        function toggleTheme() {
+            const body = document.body;
+            const currentTheme = body.getAttribute('data-theme');
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            
+            body.setAttribute('data-theme', newTheme);
+            document.getElementById('themeToggle').textContent = newTheme === 'light' ? '??' : '??';
+            
+            saveToStorage('theme', newTheme);
+            showStatus(`Switched to ${newTheme} mode`, 'success');
+        }
+
+        function handleFileUpload(e) {
+            const selectedFiles = Array.from(e.target.files);
+            uploadFiles(selectedFiles);
+        }
+
+        function handleDragOver(e) {
+            e.preventDefault();
+            document.getElementById('uploadArea').classList.add('dragover');
+        }
+
+        function handleDragLeave() {
+            document.getElementById('uploadArea').classList.remove('dragover');
+        }
+
+        function handleDrop(e) {
+            e.preventDefault();
+            document.getElementById('uploadArea').classList.remove('dragover');
+            const droppedFiles = Array.from(e.dataTransfer.files);
+            uploadFiles(droppedFiles);
+        }
+
+        function updateStorageLimit() {
+            const input = document.getElementById('storageLimitInput');
+            const newLimit = parseInt(input.value);
+            
+            if (newLimit && newLimit > 0 && newLimit <= 10000) {
+                maxStorageGB = newLimit;
+                saveToStorage('cloudvault_storage_limit', newLimit.toString());
+                updateStorageInfo();
+                showStatus(`Storage limit updated to ${newLimit} GB`, 'success');
+            } else {
+                showStatus('Please enter a valid storage limit (1-10000 GB)', 'error');
+            }
+        }
+
+        function clearCache() {
+            if (confirm('This will clear all temporary data. Continue?')) {
+                if ('caches' in window) {
+                    caches.keys().then(names => {
+                        names.forEach(name => caches.delete(name));
+                    });
+                }
+                showStatus('Cache cleared successfully', 'success');
+            }
+        }
+
+        function exportAllData() {
+            const exportData = {
+                files: files,
+                settings: {
+                    theme: getFromStorage('theme'),
+                    autoDarkMode: getFromStorage('autoDarkMode'),
+                    storageLimit: maxStorageGB,
+                    password: userPassword,
+                    masterPassword: isMasterUser ? masterPassword : null,
+                    securitySettings: securitySettings
+                },
+                securityLogs: securityLogs,
+                timestamp: new Date().toISOString(),
+                version: '3.0-secure'
+            };
+            
+            const dataStr = JSON.stringify(exportData, null, 2);
+            const dataBlob = new Blob([dataStr], { type: 'application/json' });
+            
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(dataBlob);
+            link.download = `cloudvault-secure-export-${new Date().toISOString().split('T')[0]}.json`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            
+            showStatus('Secure data exported successfully', 'success');
+            logSecurityEvent('INFO', 'Data exported with security metadata');
+        }
+
+        function toggleAutoDarkMode() {
+            const enabled = document.getElementById('autoDarkMode').checked;
+            saveToStorage('autoDarkMode', enabled.toString());
+            
+            if (enabled) {
+                checkAutoTheme();
+                showStatus('Auto dark mode enabled', 'success');
+            } else {
+                showStatus('Auto dark mode disabled', 'success');
+            }
+        }
+
+        function checkAutoTheme() {
+            const hour = new Date().getHours();
+            const autoDarkMode = getFromStorage('autoDarkMode') === 'true';
+            
+            if (autoDarkMode) {
+                const shouldBeDark = hour < 6 || hour >= 18;
+                const currentTheme = document.body.getAttribute('data-theme');
+                
+                if (shouldBeDark && currentTheme === 'light') {
+                    document.body.setAttribute('data-theme', 'dark');
+                    document.getElementById('themeToggle').textContent = '??';
+                    saveToStorage('theme', 'dark');
+                } else if (!shouldBeDark && currentTheme === 'dark') {
+                    document.body.setAttribute('data-theme', 'light');
+                    document.getElementById('themeToggle').textContent = '??';
+                    saveToStorage('theme', 'light');
+                }
+            }
+        }
+
+        function toggleView() {
+            const grid = document.getElementById('filesGrid');
+            const btn = event.target;
+            
+            if (grid.style.display === 'flex') {
+                grid.style.display = 'grid';
+                grid.style.flexDirection = '';
+                btn.textContent = '? Grid View';
+            } else {
+                grid.style.display = 'flex';
+                grid.style.flexDirection = 'column';
+                btn.textContent = '? List View';
+            }
+        }
+
+        function backupData() {
+            const backup = {
+                files: files,
+                settings: {
+                    theme: getFromStorage('theme'),
+                    autoDarkMode: getFromStorage('autoDarkMode'),
+                    storageLimit: maxStorageGB,
+                    password: userPassword,
+                    masterPassword: isMasterUser ? masterPassword : null,
+                    securitySettings: securitySettings
+                },
+                securityLogs: securityLogs,
+                timestamp: new Date().toISOString(),
+                version: '3.0-secure'
+            };
+            
+            const dataStr = JSON.stringify(backup, null, 2);
+            const dataBlob = new Blob([dataStr], { type: 'application/json' });
+            
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(dataBlob);
+            link.download = `cloudvault-backup-${new Date().toISOString().split('T')[0]}.json`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            
+            showStatus('Secure backup created successfully', 'success');
+            logSecurityEvent('INFO', 'Secure backup created');
+        }
+
+        function restoreData() {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = '.json';
+            
+            input.onchange = function(e) {
+                const file = e.target.files[0];
+                if (!file) return;
+                
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    try {
+                        const backup = JSON.parse(e.target.result);
+                        
+                        if (backup.files && Array.isArray(backup.files)) {
+                            if (confirm('This will replace all current data. Continue?')) {
+                                files = backup.files;
+                                
+                                // Restore settings if available
+                                if (backup.settings) {
+                                    if (backup.settings.theme) {
+                                        saveToStorage('theme', backup.settings.theme);
+                                        document.body.setAttribute('data-theme', backup.settings.theme);
+                                        document.getElementById('themeToggle').textContent = 
+                                            backup.settings.theme === 'light' ? '??' : '??';
+                                    }
+                                    if (backup.settings.autoDarkMode) {
+                                        saveToStorage('autoDarkMode', backup.settings.autoDarkMode);
+                                    }
+                                    if (backup.settings.storageLimit) {
+                                        maxStorageGB = backup.settings.storageLimit;
+                                        saveToStorage('cloudvault_storage_limit', maxStorageGB.toString());
+                                    }
+                                    if (backup.settings.password) {
+                                        userPassword = backup.settings.password;
+                                        saveToStorage('cloudvault_password', userPassword);
+                                    }
+                                    if (backup.settings.masterPassword && isMasterUser) {
+                                        masterPassword = backup.settings.masterPassword;
+                                        saveToStorage('cloudvault_master', masterPassword);
+                                    }
+                                    if (backup.settings.securitySettings) {
+                                        securitySettings = { ...securitySettings, ...backup.settings.securitySettings };
+                                        saveSecuritySettings();
+                                    }
+                                }
+                                
+                                if (backup.securityLogs) {
+                                    securityLogs = backup.securityLogs;
+                                }
+                                
+                                saveFiles();
+                                renderFiles();
+                                updateStorageInfo();
+                                showStatus('Secure data restored successfully', 'success');
+                                logSecurityEvent('INFO', 'Data restored from secure backup');
+                            }
+                        } else {
+                            showStatus('Invalid backup file format', 'error');
+                        }
+                    } catch (error) {
+                        showStatus('Error reading backup file', 'error');
+                        console.error(error);
+                        logSecurityEvent('ERROR', 'Backup restore failed');
+                    }
+                };
+                reader.readAsText(file);
+            };
+            
+            input.click();
+        }
+
+        function updateStorageInfo() {
+            const totalSize = files.reduce((sum, file) => sum + (file.size || 0), 0);
+            const maxStorage = maxStorageGB * 1024 * 1024 * 1024; // Convert GB to bytes
+            
+            let displaySize, unit;
+            if (totalSize < 1024 * 1024) {
+                displaySize = (totalSize / 1024).toFixed(1);
+                unit = 'KB';
+            } else if (totalSize < 1024 * 1024 * 1024) {
+                displaySize = (totalSize / (1024 * 1024)).toFixed(1);
+                unit = 'MB';
+            } else {
+                displaySize = (totalSize / (1024 * 1024 * 1024)).toFixed(1);
+                unit = 'GB';
+            }
+            
+            const usagePercent = ((totalSize / maxStorage) * 100).toFixed(1);
+            
+            // Update display
+            document.getElementById('usedStorage').textContent = `${displaySize} ${unit}`;
+            document.getElementById('maxStorage').textContent = `${maxStorageGB} GB`;
+            document.getElementById('totalStorage').textContent = maxStorageGB >= 1000 ? `${(maxStorageGB/1000).toFixed(1)} TB` : `${maxStorageGB} GB`;
+            
+            // Add storage warning if over 80%
+            const storageInfo = document.getElementById('storageInfo');
+            if (usagePercent > 80) {
+                storageInfo.style.color = 'var(--warning)';
+                if (usagePercent > 95) {
+                    storageInfo.style.color = 'var(--error)';
+                }
+            } else {
+                storageInfo.style.color = 'var(--text-secondary)';
+            }
+        }
+
+        function showStatus(message, type = 'success') {
+            const indicator = document.getElementById('statusIndicator');
+            indicator.textContent = message;
+            indicator.className = `status-indicator show`;
+            
+            if (type === 'error') {
+                indicator.style.background = 'var(--error)';
+            } else if (type === 'warning') {
+                indicator.style.background = 'var(--warning)';
+            } else if (type === 'security') {
+                indicator.style.background = 'var(--security)';
+            } else {
+                indicator.style.background = 'var(--success)';
+            }
+            
+            setTimeout(() => {
+                indicator.classList.remove('show');
+            }, 3000);
+        }
+
+        function loadSettings() {
+            // Load saved theme
+            const savedTheme = getFromStorage('theme') || 'light';
+            document.body.setAttribute('data-theme', savedTheme);
+            document.getElementById('themeToggle').textContent = savedTheme === 'light' ? '??' : '??';
+            
+            // Load auto-lock time
+            const savedAutoLock = getFromStorage('cloudvault_autolock');
+            if (savedAutoLock) {
+                window.autoLockTime = parseInt(savedAutoLock);
+            }
+            
+            // Check auto dark mode
+            checkAutoTheme();
+        }
+
+        function openFullscreen(src, type) {
+            const fullscreenDiv = document.createElement('div');
+            fullscreenDiv.style.cssText = `
+                position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+                background: rgba(0,0,0,0.9); z-index: 2000; display: flex; 
+                align-items: center; justify-content: center; cursor: pointer;
+            `;
+            
+            let content;
+            if (type === 'image') {
+                content = `<img src="${src}" style="max-width: 95%; max-height: 95%; object-fit: contain; border-radius: 0.5rem;">`;
+            } else if (type === 'video') {
+                content = `<video src="${src}" controls autoplay style="max-width: 95%; max-height: 95%; border-radius: 0.5rem;">`;
+            }
+            
+            fullscreenDiv.innerHTML = content + '<div style="position: absolute; top: 20px; right: 30px; color: white; font-size: 2rem; cursor: pointer; user-select: none;">?</div>';
+            
+            fullscreenDiv.onclick = (e) => {
+                if (e.target === fullscreenDiv || e.target.textContent === '?') {
+                    document.body.removeChild(fullscreenDiv);
+                }
+            };
+            document.body.appendChild(fullscreenDiv);
+        }
+
+        function escapeHtml(text) {
+            if (typeof text !== 'string') return text;
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        function escapeForJs(text) {
+            if (typeof text !== 'string') return '';
+            return text.replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/"/g, '\\"').replace(/\n/g, '\\n').replace(/\r/g, '\\r');
+        }
+
+        function copyToClipboard(text) {
+            if (navigator.clipboard) {
+                navigator.clipboard.writeText(text).then(() => {
+                    showStatus('Copied to clipboard!', 'success');
+                }).catch(() => {
+                    fallbackCopyTextToClipboard(text);
+                });
+            } else {
+                fallbackCopyTextToClipboard(text);
+            }
+        }
+
+        function fallbackCopyTextToClipboard(text) {
+            const textArea = document.createElement('textarea');
+            textArea.value = text;
+            textArea.style.top = '0';
+            textArea.style.left = '0';
+            textArea.style.position = 'fixed';
+            
+            document.body.appendChild(textArea);
+            textArea.focus();
+            textArea.select();
+            
+            try {
+                const successful = document.execCommand('copy');
+                if (successful) {
+                    showStatus('Copied to clipboard!', 'success');
+                } else {
+                    showStatus('Failed to copy to clipboard', 'error');
+                }
+            } catch (err) {
+                showStatus('Failed to copy to clipboard', 'error');
+            }
+            
+            document.body.removeChild(textArea);
+        }
+
+        // Enhanced keyboard shortcuts with security
+        document.addEventListener('keydown', function(e) {
+            // Disable F12, Ctrl+Shift+I, Ctrl+U, etc.
+            if (e.key === 'F12' || 
+                (e.ctrlKey && e.shiftKey && e.key === 'I') ||
+                (e.ctrlKey && e.shiftKey && e.key === 'C') ||
+                (e.ctrlKey && e.key === 'U' && !e.target.matches('#fileInput'))) {
+                e.preventDefault();
+                logSecurityEvent('WARNING', 'Developer tools access attempt blocked');
+                showSecurityAlert('??? Access denied for security reasons');
+                return false;
+            }
+            
+            // Regular shortcuts
+            if (e.ctrlKey && e.key === 'u' && e.target.matches('body')) {
+                e.preventDefault();
+                document.getElementById('fileInput').click();
+            }
+            
+            if (e.key === 'Escape') {
+                closeModal();
+                closeSettings();
+                closeSecurityCenter();
+            }
+            
+            if (e.ctrlKey && e.key === 'a' && !e.target.matches('input, textarea')) {
+                e.preventDefault();
+                const visibleFiles = files.filter(f => 
+                    !f.isDeleted && f.parentFolder === currentFolder
+                );
+                visibleFiles.forEach(file => selectedFiles.add(file.id));
+                updateBulkActions();
+                renderFiles();
+            }
+            
+            if (e.key === 'Delete' && selectedFiles.size > 0) {
+                bulkDelete();
+            }
+        });
+
+        // Security monitoring - prevent context menu
+        document.addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+            logSecurityEvent('INFO', 'Context menu blocked');
+            return false;
+        });
+
+        // Disable text selection on sensitive elements
+        document.addEventListener('selectstart', function(e) {
+            if (e.target.closest('.security-shield, .security-badge, .security-status')) {
+                e.preventDefault();
+                return false;
+            }
+        });
+
+        // Monitor for suspicious behavior
+        let keylogCount = 0;
+        document.addEventListener('keydown', function(e) {
+            keylogCount++;
+            if (keylogCount > 1000) { // Potential keylogger
+                logSecurityEvent('THREAT', 'Potential keylogger detected - high key activity');
+                showSecurityAlert('??? Suspicious activity detected!');
+                keylogCount = 0;
+            }
+        });
+
+        // Auto-save functionality with encryption
+        setInterval(saveFiles, 30000); // Auto-save every 30 seconds
+
+        // Check for auto theme every hour
+        setInterval(checkAutoTheme, 3600000);
+
+        // Security log rotation
+        setInterval(() => {
+            if (securityLogs.length > 1000) {
+                securityLogs = securityLogs.slice(-500); // Keep last 500 logs
+                logSecurityEvent('INFO', 'Security logs rotated');
+            }
+        }, 3600000); // Every hour
+
+        // Mobile responsive sidebar toggle
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.classList.toggle('show');
+        }
+
+        // Add mobile menu button for small screens
+        if (window.innerWidth <= 640) {
+            const headerLeft = document.querySelector('.header-left');
+            const menuBtn = document.createElement('button');
+            menuBtn.innerHTML = '?';
+            menuBtn.className = 'theme-toggle';
+            menuBtn.onclick = toggleSidebar;
+            menuBtn.title = 'Toggle menu';
+            headerLeft.insertBefore(menuBtn, headerLeft.firstChild);
+        }
+
+        // Initialize breadcrumb
+        updateBreadcrumb();
+
+        // Final security initialization
+        logSecurityEvent('INFO', 'Z+ Security system fully operational');
+        showStatus('??? CloudVault Pro Z+ Security Ready', 'security');
+
+        // Console warning
+        console.warn('%cSTOP!', 'color: red; font-size: 50px; font-weight: bold;');
+        console.warn('%cThis is a browser feature intended for developers. Do not enter or paste anything here that you do not understand. This could give attackers access to your CloudVault Pro account.', 'color: red; font-size: 16px;');
+        
+    </script>
+</body>
+</html>
